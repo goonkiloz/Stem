@@ -5,7 +5,7 @@ Stem is a video sharing platform, modeled after the popular platform Vine. This 
 ## MVP- Feature & Implementation
 
 **Sign-up and Sign-in**
-* The server allows the new user to sign up an account using the sign-up link in the Navigation bar when current session of the user is = 'null'. A popup modal is then shown when sign-up link is clicked. All info on the forms are required to be properly filled out in order to create a user, else the server will return errors from the Flask backend. The sign-up button is also grey out unless all info are filled out.
+* The server allows the new user to sign up an account using the sign-up link in the Navigation bar when current session of the user is = 'null'. A popup modal is then shown when sign-up link is clicked. All info on the forms are required to be properly filled out in order to create a user, else the server will return errors from the Express backend. The sign-up button is also grey out unless all info are filled out.
 
 **Full CURD of Posts**
 * Users should be able to view all posts regardless of the sign-in status.
