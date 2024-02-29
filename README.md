@@ -108,13 +108,4 @@ Table Followers {
 }
 
 
-Table Following {
-  id integer [primary key]
-  userId integer //[Foreign Key referencing Users.id]
-  followingId integer //[Foreign Key referencing Users.id]
-  created_at timestamp
-  updated_at timestamp
-}
-
 ```
-
