@@ -23,7 +23,7 @@ const validateLogin = [
 
 
 // Log in
-router.post('/', async (req, res, next) => {
+router.post('/', validateLogin, async (req, res, next) => {
     const { credential, password } = req.body;
     console.log(credential, password, "************")
     const user = await User.unscoped().findOne({
@@ -61,6 +61,26 @@ router.delete('/',(_req, res) => {
     res.clearCookie('token');
     return res.json({ message: 'success' });
 });
+
+// Current user
+router.get(
+    '/',
+    (req, res) => {
+      const { user } = req;
+      if (user) {
+        const safeUser = {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          username: user.username,
+        };
+        return res.json({
+          user: safeUser
+        });
+      } else return res.json({ user: null });
+    }
+  );
 
 
 
