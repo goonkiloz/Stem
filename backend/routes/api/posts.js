@@ -237,5 +237,4 @@ router.post('/:postId/comments', requireAuth, validateComment, async ( req, res 
 
 })
 
-
 module.exports = router
