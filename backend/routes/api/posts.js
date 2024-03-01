@@ -9,7 +9,7 @@ const { requireAuth } = require('../../utils/auth');
 const { upload } = require('../../utils/upload.js');
 const s3 = require('../../utils/aws.js')
 
-const { Post, Comment, User } = require('../../db/models');
+const { Post, Comment, User, Like, Dislike } = require('../../db/models');
 
 const validatePost = [
     check('title')
@@ -47,7 +47,6 @@ router.get('/current', requireAuth, async ( req, res ) => {
         res.status(401)
         return res.json(err)
     }
-
 
     const posts = await Post.findAll({
         where: {userId: user.id}
@@ -221,7 +220,7 @@ router.post('/:postId/comments', requireAuth, validateComment, async ( req, res 
 
     if(!post) {
         const err = new Error()
-        err.message = "Spot couldn't be found"
+        err.message = "Post couldn't be found"
         res.status(404)
         return res.json(err)
     }
@@ -235,6 +234,152 @@ router.post('/:postId/comments', requireAuth, validateComment, async ( req, res 
     res.status(201)
     res.json(newComment)
 
+})
+
+// ----------------------------------- Likes/Dislikes routes -------------------------------------------------
+
+router.get('/:postId/likes', async ( req, res ) => {
+    const { postId } = req.params;
+
+    const post = await Post.findOne({
+        where: { id: postId },
+        include: {
+            model: Like
+        }
+    })
+
+    if(!post) {
+        const err = new Error()
+        err.message = "Post couldn't be found"
+        res.status(404)
+        return res.json(err)
+    }
+
+    res.status(200)
+    res.json({
+        Likes: post.Likes
+    })
+})
+
+router.get('/:postId/dislikes', async ( req, res ) => {
+    const { postId } = req.params;
+
+    const post = await Post.findOne({
+        where: { id: postId },
+        include: {
+            model: Dislike
+        }
+    })
+
+    if(!post) {
+        const err = new Error()
+        err.message = "Post couldn't be found"
+        res.status(404)
+        return res.json(err)
+    }
+
+    res.status(200)
+    res.json({
+        Dislikes: post.Dislikes
+    })
+})
+
+router.post('/:postId/likes', requireAuth, async ( req, res ) => {
+    const { user } = req;
+
+    if (!user) {
+        const err = new Error()
+        err.message = "Authentication required"
+        res.status(401)
+        return res.json(err)
+    }
+
+    const { postId } = req.params;
+
+    const post = await Post.findOne({
+        where: { id: postId },
+        include: {
+            model: Like
+        }
+    })
+
+    if(!post) {
+        const err = new Error()
+        err.message = "Post couldn't be found"
+        res.status(404)
+        return res.json(err)
+    }
+
+    const likeCheck = await post.Likes.map((like) => {
+        if(like.userId === user.id) {
+            return true
+        }
+        return false
+    })
+
+    if (likeCheck.includes(true)) {
+        const err = new Error()
+        err.message = "User already liked this Post"
+        res.status(400)
+        return res.json(err)
+    }
+
+    const newLike = await Like.create({
+        userId: user.id,
+        postId: postId
+    })
+
+    res.status(201)
+    res.json(newLike)
+})
+
+router.post('/:postId/dislikes', requireAuth, async ( req, res ) => {
+    const { user } = req;
+
+    if (!user) {
+        const err = new Error()
+        err.message = "Authentication required"
+        res.status(401)
+        return res.json(err)
+    }
+
+    const { postId } = req.params;
+
+    const post = await Post.findOne({
+        where: { id: postId },
+        include: {
+            model: Dislike
+        }
+    })
+
+    if(!post) {
+        const err = new Error()
+        err.message = "Post couldn't be found"
+        res.status(404)
+        return res.json(err)
+    }
+
+    const dislikeCheck = await post.Dislikes.map((dislike) => {
+        if(dislike.userId === user.id) {
+            return true
+        }
+        return false
+    })
+
+    if (dislikeCheck.includes(true)) {
+        const err = new Error()
+        err.message = "User already liked this Post"
+        res.status(400)
+        return res.json(err)
+    }
+
+    const newDislike = await Dislike.create({
+        userId: user.id,
+        postId: postId
+    })
+
+    res.status(201)
+    res.json(newDislike)
 })
 
 module.exports = router
