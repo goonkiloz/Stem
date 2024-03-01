@@ -3,7 +3,8 @@ const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User, Follower, Sequelize } = require('../../db/models');
+const { User, Follower } = require('../../db/models');
+const { upload } = require('../../utils/upload');
 
 const router = express.Router();
 
@@ -29,12 +30,15 @@ const validateSignup = [
 ];
 
 // Sign up
-router.post('/', validateSignup, async (req, res) => {
+router.post('/', upload.single('profileImg'), validateSignup, async (req, res) => {
 
     const { email, password, firstName, lastName, username } = req.body;
 
+    const { key } = req.file;
+
     const hashedPassword = bcrypt.hashSync(password);
-    const user = await User.create({ email, username, firstName, lastName, hashedPassword });
+    const user = await User.create({ email, username, firstName, lastName, hashedPassword, profileImg: key });
+
 
     const safeUser = {
         id: user.id,
@@ -42,6 +46,7 @@ router.post('/', validateSignup, async (req, res) => {
         lastName: user.lastName,
         email: user.email,
         username: user.username,
+        profileImg: key
     };
 
     await setTokenCookie(res, safeUser);
@@ -65,6 +70,8 @@ router.get('/', (req, res) => {
         });
     } else return res.json({ user: null });
 });
+
+// -------------------------------------------------------- Followers routes ----------------------------------------------------
 
 router.get('/:userId/followers', async ( req, res ) => {
     const { userId } = req.params;

@@ -30,8 +30,8 @@ const multerS3Config = multerS3({
         cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-        console.log(file)
-        cb(null, new Date().toDateString() + '-' + file.originalname) //creates unique file names with dates
+        // console.log(file)
+        cb(null, new Date().toISOString() + '-' + file.originalname) //creates unique file names with dates
     }
 });
 
@@ -45,4 +45,3 @@ const upload = multer({
 
 
 exports.upload = upload;
-

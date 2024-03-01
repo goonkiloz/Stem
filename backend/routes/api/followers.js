@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { requireAuth } = require('../../utils/auth')
 
-const { User, Follower, Sequelize } = require('../../db/models');
+const { Follower } = require('../../db/models');
 
 router.delete('/:followerId', requireAuth, async ( req, res ) => {
     const { user } = req;

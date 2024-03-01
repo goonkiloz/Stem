@@ -42,13 +42,12 @@ exports.getFileFromS3 = key =>{
 };
 
 //delete file from s3 bucker
-exports.deleteFileFromS3 = (key,next) =>{
+exports.deleteFileFromS3 = (key) =>{
     const deleteParams = {
         Key:key,
         ...constantParams
     };
     s3.deleteObject(deleteParams,(error,data)=>{
 
-        next(error,data);
     });
 };
