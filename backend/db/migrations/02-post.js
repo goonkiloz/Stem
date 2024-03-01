@@ -30,6 +30,15 @@ module.exports = {
         onDelete: 'cascade',
         references: {model: 'Users', key: 'id'}
       },
+      filepath: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'filepath is required'
+          }
+        }
+      },
       thumbnail: {
         type: Sequelize.STRING,
         allowNull: false,

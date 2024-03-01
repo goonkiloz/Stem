@@ -9,15 +9,18 @@ const { requireAuth } = require('../../utils/auth');
 const { upload } = require('../../utils/upload.js');
 const s3 = require('../../utils/aws.js')
 
-const { Post, Comment, User } = require('../../db/models');
+const { Post, Comment, User, Like, Dislike } = require('../../db/models');
 
 const validatePost = [
     check('title')
         .exists({ checkFalsy: true })
         .withMessage('Title is required'),
-    check('thumbnail')
-        .exists({ checkFalsy: true })
-        .withMessage('Thumbnail is required'),
+    // check('filepath')
+    //     .exists({ checkFalsy: true })
+    //     .withMessage('FilePath is required'),
+    // check('thumbnail')
+    //     .exists({ checkFalsy: true })
+    //     .withMessage('Thumbnail is required'),
     check('description')
         .exists({ checkFalsy: true })
         .withMessage('Description is required'),
@@ -48,7 +51,6 @@ router.get('/current', requireAuth, async ( req, res ) => {
         return res.json(err)
     }
 
-
     const posts = await Post.findAll({
         where: {userId: user.id}
     });
@@ -69,7 +71,7 @@ router.get('/:postId', async ( req, res ) => {
     res.json(post);
 })
 
-router.post('/', requireAuth, validatePost, async ( req, res ) => {
+router.post('/', requireAuth, upload.any('filepath', 'thumbnail'), async ( req, res ) => {
     const { user } = req;
 
     if (!user) {
@@ -79,12 +81,42 @@ router.post('/', requireAuth, validatePost, async ( req, res ) => {
         return res.json(err)
     }
 
-    const { title, thumbnail, description } = req.body;
+    const files = [...req.files]
+
+    let imgFile;
+
+    let videoFile;
+
+    files.forEach((file) => {
+        // console.log(file)
+        if(file.mimetype === 'video/mp4') {
+            videoFile = file
+        } else {
+            imgFile = file
+        }
+    })
+
+    if(!videoFile) {
+        const err = new Error()
+        err.message = "Video required"
+        res.status(400)
+        return res.json(err)
+    }
+
+    if(!imgFile) {
+        const err = new Error()
+        err.message = "Thumbnail required"
+        res.status(400)
+        return res.json(err)
+    }
+
+    const { title, description } = req.body;
 
     const newPost = await Post.create({
         title: title,
         userId: user.id,
-        thumbnail: thumbnail,
+        filepath: videoFile.key,
+        thumbnail: imgFile.key,
         description: description
     })
 
@@ -92,7 +124,7 @@ router.post('/', requireAuth, validatePost, async ( req, res ) => {
     res.json(newPost)
 })
 
-router.put('/:postId', requireAuth, validatePost, async ( req, res ) => {
+router.put('/:postId', requireAuth, upload.any('filepath', 'thumbnail'), validatePost, async ( req, res ) => {
     const { user } = req;
 
     if (!user) {
@@ -103,7 +135,7 @@ router.put('/:postId', requireAuth, validatePost, async ( req, res ) => {
     }
 
     const { postId } = req.params;
-    const { title, thumbnail, description } = req.body;
+    const { title, description } = req.body;
 
     const post = await Post.findOne({
         where: {id: postId}
@@ -123,9 +155,47 @@ router.put('/:postId', requireAuth, validatePost, async ( req, res ) => {
         return res.json(err)
     }
 
+    const files = [...req.files]
+
+    let imgFile;
+
+    let videoFile;
+
+    files.forEach((file) => {
+        // console.log(file)
+        if(file.mimetype === 'video/mp4') {
+            videoFile = file
+        } else {
+            imgFile = file
+        }
+    })
+
+    if(!videoFile) {
+        const err = new Error()
+        err.message = "Video required"
+        res.status(400)
+        return res.json(err)
+    }
+
+    if(!imgFile) {
+        const err = new Error()
+        err.message = "Thumbnail required"
+        res.status(400)
+        return res.json(err)
+    }
+
+    if(videoFile.key !== post.filepath) {
+        await s3.deleteFileFromS3(post.filepath, null)
+    }
+
+    if(imgFile.key !== post.thumbnail) {
+        await s3.deleteFileFromS3(post.thumbnail, null)
+    }
+
     const updatedPost = await post.update({
         title,
-        thumbnail,
+        filepath: videoFile.key,
+        thumbnail: imgFile.key,
         description
     })
 
@@ -163,6 +233,8 @@ router.delete('/:postId', requireAuth, async ( req, res ) => {
         return res.json(err)
     }
 
+    await s3.deleteFileFromS3(post.filepath, null)
+    await s3.deleteFileFromS3(post.thumbnail, null)
     await post.destroy()
 
     res.status(200)
@@ -221,7 +293,7 @@ router.post('/:postId/comments', requireAuth, validateComment, async ( req, res 
 
     if(!post) {
         const err = new Error()
-        err.message = "Spot couldn't be found"
+        err.message = "Post couldn't be found"
         res.status(404)
         return res.json(err)
     }
@@ -235,6 +307,160 @@ router.post('/:postId/comments', requireAuth, validateComment, async ( req, res 
     res.status(201)
     res.json(newComment)
 
+})
+
+// ----------------------------------- Likes/Dislikes routes -------------------------------------------------
+
+router.get('/:postId/likes', async ( req, res ) => {
+    const { postId } = req.params;
+
+    const post = await Post.findOne({
+        where: { id: postId },
+        include: {
+            model: Like,
+            include: [
+                {model: User,
+                 attributes: ['id', 'username', 'profileImg']}
+            ]
+        }
+    })
+
+    if(!post) {
+        const err = new Error()
+        err.message = "Post couldn't be found"
+        res.status(404)
+        return res.json(err)
+    }
+
+    res.status(200)
+    res.json({
+        Likes: post.Likes
+    })
+})
+
+router.get('/:postId/dislikes', async ( req, res ) => {
+    const { postId } = req.params;
+
+    const post = await Post.findOne({
+        where: { id: postId },
+        include: {
+            model: Dislike,
+            include: [
+                {model: User,
+                 attributes: ['id', 'username', 'profileImg']}
+            ]
+        }
+    })
+
+    if(!post) {
+        const err = new Error()
+        err.message = "Post couldn't be found"
+        res.status(404)
+        return res.json(err)
+    }
+
+    res.status(200)
+    res.json({
+        Dislikes: post.Dislikes
+    })
+})
+
+router.post('/:postId/likes', requireAuth, async ( req, res ) => {
+    const { user } = req;
+
+    if (!user) {
+        const err = new Error()
+        err.message = "Authentication required"
+        res.status(401)
+        return res.json(err)
+    }
+
+    const { postId } = req.params;
+
+    const post = await Post.findOne({
+        where: { id: postId },
+        include: {
+            model: Like
+        }
+    })
+
+    if(!post) {
+        const err = new Error()
+        err.message = "Post couldn't be found"
+        res.status(404)
+        return res.json(err)
+    }
+
+    const likeCheck = await post.Likes.map((like) => {
+        if(like.userId === user.id) {
+            return true
+        }
+        return false
+    })
+
+    if (likeCheck.includes(true)) {
+        const err = new Error()
+        err.message = "User already liked this Post"
+        res.status(400)
+        return res.json(err)
+    }
+
+    const newLike = await Like.create({
+        userId: user.id,
+        postId: postId
+    })
+
+    res.status(201)
+    res.json(newLike)
+})
+
+router.post('/:postId/dislikes', requireAuth, async ( req, res ) => {
+    const { user } = req;
+
+    if (!user) {
+        const err = new Error()
+        err.message = "Authentication required"
+        res.status(401)
+        return res.json(err)
+    }
+
+    const { postId } = req.params;
+
+    const post = await Post.findOne({
+        where: { id: postId },
+        include: {
+            model: Dislike
+        }
+    })
+
+    if(!post) {
+        const err = new Error()
+        err.message = "Post couldn't be found"
+        res.status(404)
+        return res.json(err)
+    }
+
+    const dislikeCheck = await post.Dislikes.map((dislike) => {
+        if(dislike.userId === user.id) {
+            return true
+        }
+        return false
+    })
+
+    if (dislikeCheck.includes(true)) {
+        const err = new Error()
+        err.message = "User already liked this Post"
+        res.status(400)
+        return res.json(err)
+    }
+
+    const newDislike = await Dislike.create({
+        userId: user.id,
+        postId: postId
+    })
+
+    res.status(201)
+    res.json(newDislike)
 })
 
 module.exports = router
