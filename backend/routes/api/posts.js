@@ -15,9 +15,12 @@ const validatePost = [
     check('title')
         .exists({ checkFalsy: true })
         .withMessage('Title is required'),
-    check('thumbnail')
-        .exists({ checkFalsy: true })
-        .withMessage('Thumbnail is required'),
+    // check('filepath')
+    //     .exists({ checkFalsy: true })
+    //     .withMessage('FilePath is required'),
+    // check('thumbnail')
+    //     .exists({ checkFalsy: true })
+    //     .withMessage('Thumbnail is required'),
     check('description')
         .exists({ checkFalsy: true })
         .withMessage('Description is required'),
@@ -68,7 +71,7 @@ router.get('/:postId', async ( req, res ) => {
     res.json(post);
 })
 
-router.post('/', requireAuth, validatePost, async ( req, res ) => {
+router.post('/', requireAuth, upload.any('filepath', 'thumbnail'), async ( req, res ) => {
     const { user } = req;
 
     if (!user) {
@@ -78,12 +81,42 @@ router.post('/', requireAuth, validatePost, async ( req, res ) => {
         return res.json(err)
     }
 
-    const { title, thumbnail, description } = req.body;
+    const files = [...req.files]
+
+    let imgFile;
+
+    let videoFile;
+
+    files.forEach((file) => {
+        // console.log(file)
+        if(file.mimetype === 'video/mp4') {
+            videoFile = file
+        } else {
+            imgFile = file
+        }
+    })
+
+    if(!videoFile) {
+        const err = new Error()
+        err.message = "Video required"
+        res.status(400)
+        return res.json(err)
+    }
+
+    if(!imgFile) {
+        const err = new Error()
+        err.message = "Thumbnail required"
+        res.status(400)
+        return res.json(err)
+    }
+
+    const { title, description } = req.body;
 
     const newPost = await Post.create({
         title: title,
         userId: user.id,
-        thumbnail: thumbnail,
+        filepath: videoFile.key,
+        thumbnail: imgFile.key,
         description: description
     })
 
@@ -91,7 +124,7 @@ router.post('/', requireAuth, validatePost, async ( req, res ) => {
     res.json(newPost)
 })
 
-router.put('/:postId', requireAuth, validatePost, async ( req, res ) => {
+router.put('/:postId', requireAuth, upload.any('filepath', 'thumbnail'), validatePost, async ( req, res ) => {
     const { user } = req;
 
     if (!user) {
@@ -102,7 +135,7 @@ router.put('/:postId', requireAuth, validatePost, async ( req, res ) => {
     }
 
     const { postId } = req.params;
-    const { title, thumbnail, description } = req.body;
+    const { title, description } = req.body;
 
     const post = await Post.findOne({
         where: {id: postId}
@@ -122,9 +155,47 @@ router.put('/:postId', requireAuth, validatePost, async ( req, res ) => {
         return res.json(err)
     }
 
+    const files = [...req.files]
+
+    let imgFile;
+
+    let videoFile;
+
+    files.forEach((file) => {
+        // console.log(file)
+        if(file.mimetype === 'video/mp4') {
+            videoFile = file
+        } else {
+            imgFile = file
+        }
+    })
+
+    if(!videoFile) {
+        const err = new Error()
+        err.message = "Video required"
+        res.status(400)
+        return res.json(err)
+    }
+
+    if(!imgFile) {
+        const err = new Error()
+        err.message = "Thumbnail required"
+        res.status(400)
+        return res.json(err)
+    }
+
+    if(videoFile.key !== post.filepath) {
+        await s3.deleteFileFromS3(post.filepath, null)
+    }
+
+    if(imgFile.key !== post.thumbnail) {
+        await s3.deleteFileFromS3(post.thumbnail, null)
+    }
+
     const updatedPost = await post.update({
         title,
-        thumbnail,
+        filepath: videoFile.key,
+        thumbnail: imgFile.key,
         description
     })
 
@@ -162,6 +233,8 @@ router.delete('/:postId', requireAuth, async ( req, res ) => {
         return res.json(err)
     }
 
+    await s3.deleteFileFromS3(post.filepath, null)
+    await s3.deleteFileFromS3(post.thumbnail, null)
     await post.destroy()
 
     res.status(200)
@@ -244,7 +317,11 @@ router.get('/:postId/likes', async ( req, res ) => {
     const post = await Post.findOne({
         where: { id: postId },
         include: {
-            model: Like
+            model: Like,
+            include: [
+                {model: User,
+                 attributes: ['id', 'username', 'profileImg']}
+            ]
         }
     })
 
@@ -267,7 +344,11 @@ router.get('/:postId/dislikes', async ( req, res ) => {
     const post = await Post.findOne({
         where: { id: postId },
         include: {
-            model: Dislike
+            model: Dislike,
+            include: [
+                {model: User,
+                 attributes: ['id', 'username', 'profileImg']}
+            ]
         }
     })
 
