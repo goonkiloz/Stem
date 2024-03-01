@@ -40,14 +40,6 @@ module.exports = (sequelize, DataTypes) => {
         models.Follower,
         {foreignKey: 'followerId'}
       )
-      User.hasMany(
-        models.Following,
-        {foreignKey: 'userId'}
-      )
-      User.hasMany(
-        models.Following,
-        {foreignKey: 'followingId'}
-      )
     }
   }
   User.init({

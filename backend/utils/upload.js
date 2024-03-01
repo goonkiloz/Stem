@@ -10,7 +10,13 @@ const s3Config = new AWS.S3({
   });
 
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    if (
+        file.mimetype === "image/png" ||
+        file.mimetype === "image/jpg" ||
+        file.mimetype === "image/jpeg" ||
+        file.mimetype === "application/octet-stream" ||
+        file.mimetype === "video/mp4"
+        ){
         cb(null, true)
     } else {
         cb(null, false)
@@ -33,8 +39,10 @@ const upload = multer({
     storage: multerS3Config,
     fileFilter: fileFilter,
     limits: {
-        fileSize: 1024 * 1024 * 5 //limit for file size :5 mb limit
+        fileSize: 10000000 //limit for file size :10 mb limit
     }
 })
 
-exports.uploadImg = upload;
+
+exports.upload = upload;
+
