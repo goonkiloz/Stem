@@ -13,11 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Follower.belongsTo(
         models.User,
-        {foreignKey: 'userId'}
+        {foreignKey: 'userId',
+         as: 'followingUser'}
       )
       Follower.belongsTo(
         models.User,
-        {foreignKey: 'followerId'}
+        {foreignKey: 'followerId',
+         as: 'follower'}
       )
     }
   }
