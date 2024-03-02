@@ -18,12 +18,7 @@ module.exports = {
       },
       title: {
         type: Sequelize.STRING(50),
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'Title is required'
-          }
-        }
+        allowNull: false
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -32,30 +27,15 @@ module.exports = {
       },
       filepath: {
         type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'filepath is required'
-          }
-        }
+        allowNull: false
       },
       thumbnail: {
         type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'Thumbnail is required'
-          }
-        }
+        allowNull: false
       },
       description: {
         type: Sequelize.STRING(1000),
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'description is required'
-          }
-        }
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
