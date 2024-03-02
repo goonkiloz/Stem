@@ -1,7 +1,7 @@
 'use strict';
 const {
   Model,
-  Validator
+  // Validator
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
