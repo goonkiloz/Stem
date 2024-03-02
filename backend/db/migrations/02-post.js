@@ -1,7 +1,7 @@
 'use strict';
 
 let options = {};
-options.tableName = 'Users';
+options.tableName = 'Posts';
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
@@ -23,7 +23,7 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
-        references: {model: 'Users', key: 'id'}
+        references: {model: 'Users', key: 'id', schema: options.schema}
       },
       filepath: {
         type: Sequelize.STRING,
