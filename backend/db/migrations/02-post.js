@@ -29,10 +29,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      thumbnail: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
       description: {
         type: Sequelize.STRING(1000),
         allowNull: false

@@ -1,0 +1,47 @@
+.like-buttons {
+    display: flex;
+    flex-direction: row-reverse;
+    grid-area: likes;
+}
+
+.like-buttons > li {
+    list-style: none;
+}
+
+.likesContainer {
+    display: flex;
+    margin: 2px 10px;
+    align-items: center;
+}
+
+.likesContainer i{
+    cursor: pointer
+}
+
+.likesContainer .filled {
+    color:green;
+    font-size: 25px;
+}
+.likesContainer .empty {
+    color: #8c8c8c;
+    font-size: 25px;
+}
+
+.dislikesContainer {
+    display: flex;
+    margin: 2px 0;
+    align-items: center;
+}
+
+.dislikesContainer i{
+    cursor: pointer
+}
+
+.dislikesContainer .filled {
+    color:green;
+    font-size: 25px;
+}
+.dislikesContainer .empty {
+    color: #8c8c8c;
+    font-size: 25px;
+}

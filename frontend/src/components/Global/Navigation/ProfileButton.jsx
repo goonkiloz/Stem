@@ -1,23 +1,40 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { thunkLogout } from "../../redux/session";
+import { thunkLogout } from "../../../redux/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
-import LoginFormModal from "../LoginFormModal";
-import SignupFormModal from "../SignupFormModal";
+import LoginFormModal from "../../Login/LoginFormModal";
+import SignupFormModal from "../../Signup/SignupFormModal";
+import './ProfileButton.css'
+import { useNavigate } from "react-router-dom";
+import { getCurrentUserThunk } from "../../../redux/users";
+
 
 function ProfileButton() {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
-  const user = useSelector((store) => store.session.user);
+  const navigate = useNavigate()
+  const user = useSelector((store) => store?.session?.user);
+  const [ currUser, setCurrUser] = useState({})
   const ulRef = useRef();
 
-  const toggleMenu = (e) => {
+  const toggleMenu = async (e) => {
     e.stopPropagation(); // Keep from bubbling up to document and triggering closeMenu
     setShowMenu(!showMenu);
   };
 
   useEffect(() => {
-    if (!showMenu) return;
+    dispatch(getCurrentUserThunk())
+    .then((res) => {
+      if(res?.user?.id !== user?.id) {
+        return setCurrUser(res.user)
+    }
+    })
+  }, [dispatch, user])
+  console.log(currUser)
+
+
+  useEffect(() => {
+    if (!showMenu) return
 
     const closeMenu = (e) => {
       if (ulRef.current && !ulRef.current.contains(e.target)) {
@@ -28,43 +45,51 @@ function ProfileButton() {
     document.addEventListener("click", closeMenu);
 
     return () => document.removeEventListener("click", closeMenu);
-  }, [showMenu]);
+  }, [showMenu, dispatch]);
 
   const closeMenu = () => setShowMenu(false);
 
   const logout = (e) => {
     e.preventDefault();
+    setCurrUser(null)
+    navigate('/')
     dispatch(thunkLogout());
     closeMenu();
   };
 
   return (
+
     <>
       <button onClick={toggleMenu}>
         <i className="fas fa-user-circle" />
       </button>
+      {/* {user?.username && console.log(user?.username)} */}
       {showMenu && (
         <ul className={"profile-dropdown"} ref={ulRef}>
           {user ? (
             <>
-              <li>{user.username}</li>
-              <li>{user.email}</li>
-              <li>
+              <div>{currUser?.username}</div>
+              <div>{currUser?.email}</div>
+              <div>
                 <button onClick={logout}>Log Out</button>
-              </li>
+              </div>
             </>
           ) : (
             <>
+            <div>
               <OpenModalMenuItem
                 itemText="Log In"
                 onItemClick={closeMenu}
                 modalComponent={<LoginFormModal />}
               />
+            </div>
+            <div>
               <OpenModalMenuItem
                 itemText="Sign Up"
                 onItemClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />
+            </div>
             </>
           )}
         </ul>

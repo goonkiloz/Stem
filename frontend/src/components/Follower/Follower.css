@@ -1,0 +1,90 @@
+.follower-sidebar-container {
+    color: white;
+}
+
+.sidebar-followers {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+    margin-right: 15px;
+    padding-bottom: 30px;
+    align-content: center;
+    width: 232px;
+    height: 250px;
+    top: 75px;
+    border-bottom: solid gray;
+}
+
+.sidebar-following {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+    margin-right: 15px;
+    padding-bottom: 30px;
+    width: 232px;
+    height: 250px;
+    top: 375px;
+    border-bottom: solid gray;
+}
+
+.sidebar-popular {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+    margin-right: 15px;
+    padding-bottom: 30px;
+    width: 232px;
+    height: 250px;
+    top: 675px;
+    border-bottom: solid gray;
+}
+
+.sidebar-new {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+    margin-right: 15px;
+    width: 232px;
+    height: 250px;
+    top: 975px;
+}
+
+.sidebar-followers > h3 {
+    margin: 10px 0;
+    font-size: 30px;
+}
+.sidebar-following > h3 {
+    margin: 10px 0;
+    font-size: 30px;
+}
+.sidebar-popular > h3 {
+    margin: 10px 0;
+    font-size: 30px;
+}
+
+.sidebar-new > h3 {
+    margin: 10px 0;
+    font-size: 30px;
+}
+
+.sidebar-followers > div > h4 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+.sidebar-following > div > h4 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+.sidebar-popular > div > h4 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.sidebar-new > div > h4 {
+    margin: 10px 0;
+    font-size: 18px;
+}

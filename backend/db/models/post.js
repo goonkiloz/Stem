@@ -56,15 +56,6 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    thumbnail: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'Thumbnail is required'
-        }
-      }
-    },
     description: {
       type: DataTypes.STRING,
       allowNull: false,

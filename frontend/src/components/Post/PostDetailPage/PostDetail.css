@@ -1,0 +1,82 @@
+.detail-page {
+    display: grid;
+    padding-top: 75px;
+    grid-template-columns: 262px auto 262px;
+    grid-template-areas:
+    'followers detail sidebar';
+}
+
+.followers {
+    grid-area: followers;
+    background-color: black;
+    width: 262px;
+    height: 100%;
+}
+
+.detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: 75px;
+    height: 100%;
+    background-color: #eceff1;
+    grid-area: detail;
+}
+
+.detail-video-div {
+    display: flex;
+    width: 80%;
+    justify-content: center;
+}
+
+.detail-video-foot {
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+}
+
+.detail-video-div > video {
+    position: relative;
+    object-fit: contain;
+    top: 0px;
+    right: 0px;
+    width: 100%;
+    height: 800px;
+}
+
+.sidebar {
+    grid-area: sidebar;
+    background-color: black;
+    width: 262px;
+    height: 100%;
+}
+
+.detail-post-info{
+    display: flex;
+    align-items: center;
+    width: 80%;
+    margin: 25px 0;
+}
+
+.post-title {
+    grid-area: title;
+    font-size: xx-large;
+    margin: 15px 15px 15px 0;
+}
+
+.post-user {
+    grid-area: user;
+    display: flex;
+}
+
+.post-user > p {
+    margin: 0;
+}
+
+.follow-button {
+    margin-left: 10px;
+}
+
+.comment-container {
+    width: 80%;
+}
