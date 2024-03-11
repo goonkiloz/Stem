@@ -1,0 +1,112 @@
+.profile-page {
+    display: grid;
+    padding-top: 75px;
+    grid-template-columns: 262px auto 262px;
+    grid-template-areas:
+    'followers detail sidebar';
+    bottom: 0px;
+}
+
+.followers {
+    grid-area: followers;
+    background-color: black;
+    width: 262px;
+    height: 100%;
+}
+
+.profile {
+    /* position: fixed;
+    right: 262px;
+    left: 262px; */
+    min-height: 1242px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: 75px;
+    height: 100%;
+    background-color: #eceff1;
+    grid-area: detail;
+    bottom: 1px;
+    margin-bottom: 50px;
+}
+
+.user-card {
+    margin-top: 75px;
+    display: grid;
+    width: 1400px;
+    margin-bottom: 75px;
+    grid-template-columns: 250px auto;
+    grid-template-areas: 'pic info';
+}
+
+.profile-picture {
+    grid-area: pic;
+    width: 250px;
+    height: 250px;
+}
+
+.user-info {
+    display: grid;
+    grid-area: info;
+    background-color: black;
+    color: white;
+    padding: 10px;
+    grid-template-areas:
+    'username .'
+    'followers following'
+    ;
+    grid-template-rows: 25% 75%;
+    grid-template-columns: 50% 50%;
+}
+
+.username-button {
+    padding: 10px;
+    display: flex;
+    grid-area: username;
+    align-items: center;
+}
+
+.user-followers {
+    padding: 10px;
+    grid-area: followers;
+}
+
+.user-followers > div > img {
+    width: 25px;
+    height: 25px;
+    border-radius: 25px;
+}
+
+.user-following > div > img {
+    width: 25px;
+    height: 25px;
+    border-radius: 25px;
+}
+
+
+.user-following {
+    padding: 10px;
+    grid-area: following;
+}
+
+.user-posts {
+    display: flex;
+    flex-direction: column;
+    width: 1400px;
+}
+
+.user-posts > h3 {
+    font-size: 36px;
+}
+
+.user-videos {
+    align-self: center;
+}
+
+
+.sidebar {
+    grid-area: sidebar;
+    background-color: black;
+    width: 262px;
+    height: 100%;
+}

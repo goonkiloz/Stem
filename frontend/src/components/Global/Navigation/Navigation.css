@@ -1,0 +1,96 @@
+/* .page-container {
+    display: flex;
+    background-color: black;
+  } */
+
+  .navbar-container {
+    position: fixed;
+    display: grid;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    grid-template-columns: 110px 150px auto 150px 110px;
+    grid-template-areas: 'logo feed search . profilebutton';
+    background-color: black;
+    width: 100%;
+    height: 75px;
+    z-index: 1;
+  }
+
+
+
+  .navbar-logo {
+    grid-area: logo;
+    width: 50px;
+    height: 50px;
+    margin: 11.5px 30px;
+  }
+
+  .active {
+    width: 0px;
+  }
+
+  .navbar-feed {
+    grid-area: feed;
+    display: flex;
+    border-left: .5px solid;
+    border-right: .5px solid;
+    border-color: rgba(128, 128, 128, .5);
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 65px;
+    color: white;
+    text-decoration: none;
+  }
+
+  .navbar-profile-container {
+    grid-area: profilebutton;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: .5px solid;
+    border-color: rgba(128, 128, 128, .5);
+    width: 110px;
+    height: 65px;
+  }
+
+  .navbar-profile-container > button {
+    border-radius: 25px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .navbar-profile-container > button.active {
+    border-radius: 25px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .navbar-search {
+    display: flex;
+    grid-area: search;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-self: center;
+    width: 700px;
+    height: 75px;
+    color: white;
+  }
+
+  .navbar-search input{
+    border-radius: 10px 0px 0px 10px;
+    border: 0;
+    text-align: center;
+    width: 700px;
+    height: 30px;
+    padding: 0
+  }
+
+  .navbar-search button{
+    height: 30px;
+    width: 30px;
+    border: 0px;
+    border-radius: 0px 10px 10px 0;
+    cursor: pointer;
+  }

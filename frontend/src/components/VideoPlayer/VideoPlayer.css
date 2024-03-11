@@ -1,0 +1,13 @@
+video{
+    position: relative;
+    color: #525252;
+    border-radius: 10px;
+    background-color: black;
+    width: 600px;
+    height: 450px;
+    float: right;
+    bottom: 600px;
+    right: 15%;
+    object-fit: conver;
+    opacity: .9;
+}

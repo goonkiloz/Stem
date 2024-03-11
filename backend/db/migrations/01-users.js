@@ -40,7 +40,7 @@ module.exports = {
       profileImg: {
         type: Sequelize.STRING(255),
         allowNull: false,
-        defaultValue: ""
+        defaultValue: "https://stem-project.s3.us-east-2.amazonaws.com/defaultUser.jpg"
       },
       createdAt: {
         allowNull: false,

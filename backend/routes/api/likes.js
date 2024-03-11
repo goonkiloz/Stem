@@ -5,6 +5,20 @@ const { requireAuth } = require('../../utils/auth');
 
 const { Like, Dislike } = require('../../db/models');
 
+router.get('/', async ( req, res ) => {
+    const likes = await Like.findAll({})
+
+    res.status(200)
+    res.json(likes)
+})
+
+router.get('/dislikes', async ( req, res ) => {
+    const likes = await Like.findAll({})
+
+    res.status(200)
+    res.json(likes)
+})
+
 router.get('/current', requireAuth, async ( req, res ) => {
     const { user } = req;
 
@@ -118,3 +132,14 @@ router.delete('/dislikes/:dislikeId', requireAuth, async ( req, res ) => {
 })
 
 module.exports = router
+
+
+
+
+
+// --------------------------------------------------------
+// -----------------------------------------------------------
+//---------------------------------------------------------------
+// -----------------------------USING THE BATHROOM------------------
+// --------------------------------------------------------------------
+// -----------------------------------------------------------------------

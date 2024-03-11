@@ -39,15 +39,6 @@ module.exports = {
           }
         }
       },
-      thumbnail: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'Thumbnail is required'
-          }
-        }
-      },
       description: {
         type: Sequelize.STRING(1000),
         allowNull: false,
