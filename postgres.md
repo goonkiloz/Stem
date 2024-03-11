@@ -37,3 +37,9 @@ Make sure to install postgres, psql, and postbird.
 
 Postbird install: https://github.com/Paxa/postbird
 Postgres install: https://www.postgresql.org/download/
+
+#remove seed data from postgres
+DROP SCHEMA stemdb CASCADE;
+CREATE SCHEMA stemdb;
+GRANT ALL ON SCHEMA stemdb TO postgres;
+GRANT ALL ON SCHEMA stemdb TO public;

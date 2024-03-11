@@ -11,10 +11,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Post.belongsTo(
-        models.User,
-        {foreignKey: 'userId'}
-      )
       Post.hasMany(
         models.Comment,
         {foreignKey: 'postId'}
@@ -31,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
         models.View,
         {foreignKey: 'postId'}
       )
+      Post.belongsTo(
+        models.User,
+        {foreignKey: 'userId'}
+      )
     }
   }
   Post.init({
@@ -38,6 +38,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
+        notNull: {
+          msg: 'Title is required'
+        },
         len: [1, 50]
       }
     },
@@ -47,11 +50,21 @@ module.exports = (sequelize, DataTypes) => {
     filepath: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'FilePath is required'
+        }
+      }
     },
     description: {
       type: DataTypes.STRING,
       allowNull: false,
-      len: [1, 1000]
+      validate: {
+        notNull: {
+          msg: 'Description is required'
+        },
+        len: [1, 1000]
+      }
     },
   }, {
     sequelize,

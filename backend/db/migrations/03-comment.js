@@ -1,7 +1,7 @@
 'use strict';
 
 let options = {};
-options.tableName = 'Users';
+options.tableName = 'Comments';
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Comments', {
+    await queryInterface.createTable(options, {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -19,12 +19,12 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
-        references: { model: 'Users', key: 'id'}
+        references: { model: 'Users', key: 'id', schema: options.schema}
       },
       postId: {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
-        references: { model: 'Posts', key: 'id'}
+        references: { model: 'Posts', key: 'id', schema: options.schema}
       },
       comment: {
         type: Sequelize.STRING(100),
@@ -43,6 +43,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Comments');
+    await queryInterface.dropTable(options);
   }
 };
