@@ -22,8 +22,8 @@ const FollowerSideBar = () => {
     }, [dispatch, currentUser])
 
     const popularUsers = users.sort(function(a, b) {
-        let keyA = a.Followers.length
-        let keyB = b.Followers.length
+        let keyA = a?.Followers?.length
+        let keyB = b?.Followers?.length
 
         if (keyA < keyB) return -1;
         if (keyA > keyB) return 1;
@@ -31,8 +31,8 @@ const FollowerSideBar = () => {
     })
 
     const newUsers = users.sort(function(a, b) {
-        let keyA = a.createdAt
-        let keyB = b.createdAt
+        let keyA = a?.createdAt
+        let keyB = b?.createdAt
 
         if (keyA < keyB) return 1;
         if (keyA > keyB) return -1;

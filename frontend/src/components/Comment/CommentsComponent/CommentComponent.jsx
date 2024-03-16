@@ -9,7 +9,7 @@ import DeleteCommentModal from "../DeleteCommentModal/DeleteCommentModal";
 
 const CommentComponent = ({post}) => {
     const comments = useSelector(state => state?.comments?.allComments)
-    const currentUser = useSelector((state) => state.session.user);
+    const currentUser = useSelector((state) => state?.session?.user);
 
     const [comment, setComment] = useState();
     const [validationErrors, setValidationErrors] = useState({});
@@ -34,12 +34,12 @@ const CommentComponent = ({post}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(comment.slice(comment.length, 1))
+        console.log(comment?.slice(comment?.length, 1))
 
         const newComment = {
             comment: comment,
-            userId: currentUser.Id,
-            postId: post.id
+            userId: currentUser?.Id,
+            postId: post?.id
         }
 
         const res = await dispatch(postCommentThunk(newComment, post?.id))
@@ -58,7 +58,7 @@ const CommentComponent = ({post}) => {
 
     if (!comments) return <div>Loading...</div>
 
-    if (comments.length === 0) {
+    if (comments?.length === 0) {
         return(
             <div>
                 <div>Be the first to post a comment!</div>
@@ -70,11 +70,11 @@ const CommentComponent = ({post}) => {
 
     return (
         <div className="commentViewContainer">
-            <h3>{comments.length> 1 ? comments.length + ' Comments' : '1 Comment'} </h3>
+            <h3>{comments?.length> 1 ? comments?.length + ' Comments' : '1 Comment'} </h3>
             <div className='commentsContainer'>
                 <div className="comments">
                 {comments?.map(comment => (
-                    <div key={comment.id} className='commentBox'>
+                    <div key={comment?.id} className='commentBox'>
                         <div className="comment">
                             <div className="commentUser">
                                 {comment?.User?.username}
@@ -87,18 +87,18 @@ const CommentComponent = ({post}) => {
                             </div>
                             <div className="comment-buttons">
 
-                            {currentUser.id === comment.userId &&
+                            {currentUser?.id === comment?.userId &&
                             <div className="comment-edit-button">
                                 <OpenModalButton
-                                    modalComponent={<EditCommentModal comment={comment} postId={post.id}/>}
+                                    modalComponent={<EditCommentModal comment={comment} postId={post?.id}/>}
                                     buttonText='Edit'
                                     />
                             </div>
                             }
-                            {currentUser.id === comment.userId &&
+                            {currentUser?.id === comment?.userId &&
                             <div className="comment-delete-button">
                                 <OpenModalButton
-                                        modalComponent={<DeleteCommentModal commentId={comment.id}/>}
+                                        modalComponent={<DeleteCommentModal commentId={comment?.id}/>}
                                         buttonText='Delete'
                                         />
                             </div>
@@ -129,7 +129,7 @@ const CommentComponent = ({post}) => {
                         </button>
                     </form>
                     {validationErrors && (
-                        <p className='review-form-error'>{validationErrors.message}</p>
+                        <p className='review-form-error'>{validationErrors?.message}</p>
                         )}
                 </div>
                 }
