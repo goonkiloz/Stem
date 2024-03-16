@@ -8,7 +8,7 @@ import "./CreatePost.css";
 const CreatePostPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.session.user);
+    const user = useSelector((state) => state?.session?.user);
     const [isButtonDisabled, setButtonDisabled] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -26,14 +26,13 @@ const CreatePostPage = () => {
         formData.append("description", description);
         formData.append("userId", user.id);
         formData.append("filePath", filePath);
-
         let errors = {};
-        console.log(title, description, filePath)
-        if(title.length === 0) {
+
+        if(title?.length === 0) {
             console.log(title)
             errors.title = 'title is required'
         }
-        if(description.length === 0) {
+        if(description?.length === 0) {
             console.log(title)
             errors.description = 'description is required'
         }
@@ -44,11 +43,11 @@ const CreatePostPage = () => {
 
         console.log(errors)
 
-        if (errors.title || errors.description || errors.filePath) {
+        if (errors?.title || errors?.description || errors?.filePath) {
             console.log('error')
             setValidationErrors(errors)
             setButtonDisabled(false)
-        } else if(!errors.title && !errors.description && !errors.filePath) {
+        } else if(!errors?.title && !errors?.description && !errors?.filePath) {
             const res = await dispatch(postPostThunk(formData));
             console.log(res)
 
@@ -56,7 +55,7 @@ const CreatePostPage = () => {
                 setValidationErrors(res);
                 setButtonDisabled(false)
             } else {
-                navigate(`/posts/${res.id}`)
+                navigate(`/posts/${res?.id}`)
             }
         }
 

@@ -43,7 +43,6 @@ const ProfilePage = () => {
     useEffect(() => {
         dispatch(getFollowersThunk(userId))
         .then(res => {
-            console.log(res)
             setFollowers(res)
         })
     }, [dispatch, userId])
@@ -138,7 +137,7 @@ const ProfilePage = () => {
                         {userPosts?.map((post) => {
                             return (
                                 <div key={post.id} className="videos">
-                                    <PostComponent post={post} src={post?.filepath} key={post.id}/>
+                                    <PostComponent post={post} src={post?.filepath} key={post?.id}/>
                                 </div>
                             )
                         })}

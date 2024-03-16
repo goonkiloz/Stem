@@ -46,7 +46,7 @@ const LikesComponent = ({post}) => {
 
     const handleLike = () => {
         if(!like && !dislike) {
-            dispatch(postLikeThunk(post.id))
+            dispatch(postLikeThunk(post?.id))
             .then((res) => {
                 setLikeId(res.id)
                 setLike(true)
@@ -68,7 +68,7 @@ const LikesComponent = ({post}) => {
 
     const handleDislike = () => {
         if(!like && !dislike) {
-            dispatch(postDislikeThunk(post.id))
+            dispatch(postDislikeThunk(post?.id))
             .then((res) => {
                 setDislikeId(res.id)
                 setDislike(true)

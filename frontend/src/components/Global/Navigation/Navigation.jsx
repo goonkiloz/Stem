@@ -34,7 +34,7 @@ function Navigation() {
         type="text"
         placeholder="Search..."
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => setSearch(e?.target?.value)}
       />
       <button
         type="submit"

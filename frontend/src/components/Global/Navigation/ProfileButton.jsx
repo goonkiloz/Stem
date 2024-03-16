@@ -69,7 +69,7 @@ function ProfileButton() {
             <>
               <div>{currUser?.username}</div>
               <div>
-                <button onClick={() => navigate(`/user/${currUser.id}`)}>Profile</button>
+                <button onClick={() => navigate(`/user/${currUser?.id}`)}>Profile</button>
               </div>
               <div>
                 <button onClick={logout}>Log Out</button>

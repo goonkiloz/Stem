@@ -6,8 +6,8 @@ import { editCommentThunk } from '../../../redux/comments';
 
 function EditCommentModal({comment, postId}) {
     const dispatch = useDispatch();
-    const commentText = comment.comment
-    const commentId = comment.id
+    const commentText = comment?.comment
+    const commentId = comment?.id
     //const sessionUser = useSelector((state) => state.session.user);
     const [validationErrors, setValidationErrors] = useState({});
     const [newComment, setNewComment] = useState(commentText);
@@ -48,13 +48,13 @@ function EditCommentModal({comment, postId}) {
             <h1 className='title'>Update Your Comment</h1>
 
             {validationErrors && (
-                <p className='comment form-error'>{validationErrors.comment}</p>
+                <p className='comment form-error'>{validationErrors?.comment}</p>
             )}
 
             <form className='comment-form' onSubmit={handleConfirmSubmit}>
                 <textarea className='post-comment-form-input'
                     value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
+                    onChange={(e) => setNewComment(e?.target?.value)}
                     name='comment'
                     placeholder='Leave your comment here...'
                     rows='5'
@@ -63,7 +63,7 @@ function EditCommentModal({comment, postId}) {
                 <button className='confirm-submit-button'
                     type='button'
                     onClick={handleConfirmSubmit}
-                    disabled={newComment.length < 10}
+                    disabled={newComment?.length < 10}
                 >
                     Yes
                 </button>

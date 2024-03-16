@@ -28,22 +28,22 @@ const EditPostModal = ({post}) => {
         console.log(description)
 
         let errors = {};
-        if(title.length === 0) {
+        if(title?.length === 0) {
             console.log(title)
             errors.title = 'title is required'
         }
-        if(description.length === 0) {
+        if(description?.length === 0) {
             console.log(title)
             errors.description = 'description is required'
         }
 
         console.log(errors)
 
-        if (errors.title || errors.description) {
+        if (errors?.title || errors?.description) {
             setValidationErrors(errors)
             setButtonDisabled(false)
-        } else if(!errors.title && !errors.description) {
-            const res = await dispatch(putPostThunk(updatedPost, post.id));
+        } else if(!errors?.title && !errors?.description) {
+            const res = await dispatch(putPostThunk(updatedPost, post?.id));
             console.log(res)
 
             if (!res.id) {
@@ -51,7 +51,7 @@ const EditPostModal = ({post}) => {
                 setButtonDisabled(false)
             } else {
                 closeModal()
-                navigate(`/posts/${res.id}`)
+                navigate(`/posts/${res?.id}`)
             }
         }
 
