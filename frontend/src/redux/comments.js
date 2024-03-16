@@ -74,11 +74,11 @@ export const postCommentThunk = (comment, postId) => async (dispatch) => {
 export const editCommentThunk =
   (comment, commentId, postId) => async (dispatch) => {
     try {
-      const res = await fetch(`/api/comments/${commentId}`, {
+      const res = await csrfFetch(`/api/comments/${commentId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          comment_text: comment.commentText,
+          comment: comment.comment,
         }),
       });
       if (res.ok) {
@@ -96,7 +96,7 @@ export const editCommentThunk =
 
 export const deleteCommentThunk = (commentId) => async (dispatch) => {
   try {
-    const res = await fetch(`/api/comments/${commentId}`, {
+    const res = await csrfFetch(`/api/comments/${commentId}`, {
       method: "DELETE",
     });
     if (res.ok) {
@@ -114,9 +114,10 @@ export const deleteCommentThunk = (commentId) => async (dispatch) => {
 const initialState = { allComments: [], byId: {} };
 
 const commentsReducer = (state = initialState, action) => {
-  const newState = { ...state };
+  let newState;
   switch (action.type) {
     case GET_ALL_COMMENTS_BY_POST_ID:
+      newState = { ...state }
       newState.allComments = action.payload;
       action.payload.forEach((comment) => {
         newState.byId[comment.id] = comment;
@@ -124,11 +125,13 @@ const commentsReducer = (state = initialState, action) => {
       return newState;
 
     case POST_COMMENT:
+      newState = { ...state }
       newState.allComments.push(action.payload);
       newState.byId[action.payload.id] = action.payload;
       return newState;
 
     case EDIT_COMMENT: {
+      newState = { ...state }
       const index = newState.allComments.findIndex(
         (comment) => comment.id === action.payload.id
       );
@@ -138,6 +141,7 @@ const commentsReducer = (state = initialState, action) => {
     }
 
     case REMOVE_COMMENT:
+      newState = { ...state }
       newState.allComments = newState.allComments.filter(
         (comment) => comment.id !== action.payload
       );

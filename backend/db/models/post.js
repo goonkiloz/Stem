@@ -37,34 +37,16 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'Title is required'
-        },
-        len: [1, 50]
-      }
     },
     userId: {
       type: DataTypes.INTEGER,
     },
     filepath: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'FilePath is required'
-        }
-      }
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'Description is required'
-        },
-        len: [1, 1000]
-      }
+      allowNull: false
     },
   }, {
     sequelize,

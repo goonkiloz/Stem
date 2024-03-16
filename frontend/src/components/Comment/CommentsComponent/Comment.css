@@ -57,11 +57,13 @@
     width: 100%;
 }
 
+
 .comment {
     display: grid;
+    grid-template-columns: 25% 55% 12% ;
     grid-template-areas:
-    'name . time'
-    'comment comment time'
+    'name .  time '
+    'comment comment buttons'
     ;
     justify-content: space-between;
     margin:0 10px;
@@ -79,5 +81,23 @@
 
 .commentTime {
     grid-area: time;
-    justify-self: flex-start
+    justify-self: flex-end
+}
+
+.comment-buttons {
+    display: flex;
+    grid-area: buttons;
+    justify-self: flex-end;
+}
+
+.comment-edit-button > button {
+    background-color: green;
+    width: 70px;
+    border-radius: 10px 0 0 0;
+}
+
+.comment-delete-button > button {
+    background-color: green;
+    width: 70px;
+    border-radius: 0 0 10px 0;
 }

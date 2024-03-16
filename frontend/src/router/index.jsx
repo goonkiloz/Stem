@@ -5,6 +5,7 @@ import FeedPage from '../components/Feed/FeedPage';
 import PostDetailPage from '../components/Post/PostDetailPage/PostDetailPage';
 import NotFoundPage from '../components/NotFound/NotFoundPage';
 import ProfilePage from '../components/Profile/ProfilePage';
+import CreatePostPage from '../components/Post/CreatePostPage/CreatePostPage';
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: 'user/:userId',
         element: <ProfilePage />
+      },
+      {
+        path: 'posts/new',
+        element: <CreatePostPage />
       },
       {
         path: '*',

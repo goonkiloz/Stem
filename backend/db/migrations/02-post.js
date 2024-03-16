@@ -18,7 +18,7 @@ module.exports = {
       },
       title: {
         type: Sequelize.STRING(50),
-        allowNull: false
+        allowNull: false,
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -27,7 +27,6 @@ module.exports = {
       },
       filepath: {
         type: Sequelize.STRING,
-        allowNull: false
       },
       description: {
         type: Sequelize.STRING(1000),

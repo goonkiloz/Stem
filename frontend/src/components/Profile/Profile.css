@@ -101,6 +101,7 @@
 
 .user-videos {
     align-self: center;
+    margin-top: 75px;
 }
 
 
@@ -109,4 +110,8 @@
     background-color: black;
     width: 262px;
     height: 100%;
+}
+
+.videos {
+    margin-bottom: 75px;
 }

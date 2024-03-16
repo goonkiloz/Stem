@@ -25,6 +25,10 @@ function Navigation() {
       Feed
     </NavLink>
 
+    <NavLink className='navbar-post' to='/posts/new'>
+      New Post
+    </NavLink>
+
     <form className="navbar-search">
       <input
         type="text"

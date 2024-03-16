@@ -14,8 +14,10 @@ const FollowerSideBar = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        dispatch(currentFollowersThunk())
-        dispatch(currentFollowingThunk())
+        if(currentUser) {
+            dispatch(currentFollowersThunk())
+            dispatch(currentFollowingThunk())
+        }
         dispatch(getUsersThunk())
     }, [dispatch, currentUser])
 
@@ -37,25 +39,6 @@ const FollowerSideBar = () => {
         return 0;
     })
 
-    // console.log('----------------------------------------------------------------------------')
-
-    // console.log('followers', followers)
-
-    // console.log('----------------------------------------------------------------------------')
-
-    // console.log('following', following)
-
-    // console.log('----------------------------------------------------------------------------')
-
-    // console.log('popular', popularUsers.reverse())
-
-    // console.log('----------------------------------------------------------------------------')
-
-    // console.log('new', newUsers)
-
-    // console.log('----------------------------------------------------------------------------')
-
-
     return (
         <div className="follower-sidebar-container">
         {currentUser ? (
@@ -63,7 +46,7 @@ const FollowerSideBar = () => {
                     <h3>Followers</h3>
                     {followers?.slice(0, 5).map((user) => {
                         return(
-                            <div>
+                            <div key={user.id}>
                                 <h4 onClick={() => navigate(`/user/${user?.follower?.id}`)}>{user?.follower?.username}</h4>
                             </div>
                         )
@@ -83,7 +66,7 @@ const FollowerSideBar = () => {
                 {following?.slice(0, 5).map((user) => {
                     console.log(user)
                     return(
-                        <div>
+                        <div key={user.id}>
                             <h4 onClick={() => navigate(`/user/${user?.followingUser?.id}`)}>{user?.followingUser?.username}</h4>
                         </div>
                     )
@@ -99,7 +82,7 @@ const FollowerSideBar = () => {
                 <h3>Popular</h3>
                 {popularUsers?.slice(0, 5).reverse().map((user) => {
                     return(
-                    <div>
+                    <div key={user.id}>
                         <h4 onClick={() => navigate(`/user/${user?.id}`)}>{user?.username}</h4>
                     </div>
                     )
@@ -109,7 +92,7 @@ const FollowerSideBar = () => {
                 <h3>New</h3>
                 {newUsers?.slice(0, 5).map((user) => {
                     return(
-                        <div>
+                        <div key={user.id}>
                             <h4 onClick={() => navigate(`/user/${user?.id}`)}>{user?.username}</h4>
                         </div>
                         )
@@ -119,4 +102,4 @@ const FollowerSideBar = () => {
     )
 }
 
-export default FollowerSideBar
+export default FollowerSideBar;
