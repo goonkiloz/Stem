@@ -1,0 +1,103 @@
+.commentViewContainer {
+    width: 100%;
+    min-height: 254px;
+}
+.commentsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+}
+
+.comments {
+    background-color: gray;
+    border-radius: 10px 10px 0 0;
+}
+
+
+.commentBox {
+    padding: 10px 0;
+    width: 100%;
+    border-bottom: .5px solid rgba(0, 0, 0, .2);
+}
+
+.comment-field {
+    display: grid;
+    grid-template-columns: 90% 10%;
+    grid-template-areas: 'textarea button';
+    width: 100%;
+}
+
+.textfield{
+    display: flex;
+    grid-area: textarea;
+    border: .5px solid;
+    resize: none;
+    border-radius:0 0 0 10px;
+
+    width: 100%;
+    height: 50px;
+    padding: 0;
+}
+.textfield:focus {
+    outline: none;
+}
+
+.review-form-error{
+    margin: 5px 0;
+    color: red;
+}
+
+.postreview-submit-button {
+    grid-area: button;
+    border: .5px solid;
+    border-radius:0 0 10px 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+
+.comment {
+    display: grid;
+    grid-template-columns: 25% 55% 12% ;
+    grid-template-areas:
+    'name .  time '
+    'comment comment buttons'
+    ;
+    justify-content: space-between;
+    margin:0 10px;
+}
+
+.commentUser {
+    grid-area: name;
+    justify-self: flex-start
+}
+
+.commentText {
+    grid-area: comment;
+    justify-self: flex-start
+}
+
+.commentTime {
+    grid-area: time;
+    justify-self: flex-end
+}
+
+.comment-buttons {
+    display: flex;
+    grid-area: buttons;
+    justify-self: flex-end;
+}
+
+.comment-edit-button > button {
+    background-color: green;
+    width: 70px;
+    border-radius: 10px 0 0 0;
+}
+
+.comment-delete-button > button {
+    background-color: green;
+    width: 70px;
+    border-radius: 0 0 10px 0;
+}

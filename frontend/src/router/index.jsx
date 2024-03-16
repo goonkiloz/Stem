@@ -1,8 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
-import LoginFormPage from '../components/LoginFormPage';
-import SignupFormPage from '../components/SignupFormPage';
 import Layout from './Layout';
 import Splash from '../components/Splash';
+import FeedPage from '../components/Feed/FeedPage';
+import PostDetailPage from '../components/Post/PostDetailPage/PostDetailPage';
+import NotFoundPage from '../components/NotFound/NotFoundPage';
+import ProfilePage from '../components/Profile/ProfilePage';
+import CreatePostPage from '../components/Post/CreatePostPage/CreatePostPage';
 
 export const router = createBrowserRouter([
   {
@@ -13,13 +16,25 @@ export const router = createBrowserRouter([
         element: <Splash />,
       },
       {
-        path: "login",
-        element: <LoginFormPage />,
+        path: 'feed',
+        element: <FeedPage />
       },
       {
-        path: "signup",
-        element: <SignupFormPage />,
+        path: 'posts/:postId',
+        element: <PostDetailPage />
       },
+      {
+        path: 'user/:userId',
+        element: <ProfilePage />
+      },
+      {
+        path: 'posts/new',
+        element: <CreatePostPage />
+      },
+      {
+        path: '*',
+        element: <NotFoundPage />
+      }
     ],
   },
 

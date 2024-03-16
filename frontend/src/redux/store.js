@@ -6,9 +6,19 @@ import {
 } from "redux";
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
+import userReducer from "./users";
+import postsReducer from "./posts";
+import commentsReducer from "./comments";
+import likesReducer from "./likes";
+import followersReducer from "./followers";
 
 const rootReducer = combineReducers({
     session: sessionReducer,
+    users: userReducer,
+    posts: postsReducer,
+    comments: commentsReducer,
+    likes: likesReducer,
+    followers: followersReducer
 });
 
 let enhancer;

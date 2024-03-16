@@ -3,7 +3,55 @@ const router = express.Router();
 
 const { requireAuth } = require('../../utils/auth')
 
-const { Follower } = require('../../db/models');
+const { Follower, User } = require('../../db/models');
+
+router.get('/current/followers', requireAuth, async ( req, res ) => {
+    const { user } = req;
+
+    if (!user) {
+        const err = new Error()
+        err.message = "Authentication required"
+        res.status(401)
+        return res.json(err)
+    }
+
+    const followers = await Follower.findAll({
+        where: {userId: user.id},
+        attributes: ['id'],
+        include: {
+            model: User,
+            as: 'follower',
+            attributes: ['id', 'username', 'profileImg']
+        }
+    })
+    console.log(followers)
+    res.status(200)
+    res.json(followers)
+})
+
+router.get('/current/following', requireAuth, async ( req, res ) => {
+    const { user } = req;
+
+    if (!user) {
+        const err = new Error()
+        err.message = "Authentication required"
+        res.status(401)
+        return res.json(err)
+    }
+
+    const follower = await Follower.findAll({
+        where: {followerId: user.id},
+        attributes: ['id'],
+        include: {
+            model: User,
+            as: 'followingUser',
+            attributes: ['id', 'username', 'profileImg']
+        }
+    })
+
+    res.status(200)
+    res.json(follower)
+})
 
 router.delete('/:followerId', requireAuth, async ( req, res ) => {
     const { user } = req;
@@ -28,9 +76,6 @@ router.delete('/:followerId', requireAuth, async ( req, res ) => {
         return res.json(err)
     }
 
-    console.log({"followerUserId" : follower.userId})
-    console.log({"followerFollowerId" : follower.followerId})
-    console.log({"UserId" : user.id})
 
     if(follower.followerId !== user.id && follower.userId !== user.id) {
         const err = new Error()

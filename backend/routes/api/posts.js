@@ -12,18 +12,9 @@ const s3 = require('../../utils/aws.js')
 const { Post, Comment, User, Like, Dislike } = require('../../db/models');
 
 const validatePost = [
-    check('title')
+    check('filePath')
         .exists({ checkFalsy: true })
-        .withMessage('Title is required'),
-    // check('filepath')
-    //     .exists({ checkFalsy: true })
-    //     .withMessage('FilePath is required'),
-    // check('thumbnail')
-    //     .exists({ checkFalsy: true })
-    //     .withMessage('Thumbnail is required'),
-    check('description')
-        .exists({ checkFalsy: true })
-        .withMessage('Description is required'),
+        .withMessage('Video is required'),
     handleValidationErrors
 ]
 
@@ -35,7 +26,10 @@ const validateComment = [
 ]
 
 router.get('/', async (req, res) => {
-    const posts = await Post.findAll({});
+    const posts = await Post.findAll({
+        include: { model: User,
+            attributes: ['id', 'username', 'profileImg']}
+    });
 
     res.status(200);
     res.json(posts);
@@ -64,15 +58,20 @@ router.get('/:postId', async ( req, res ) => {
     const { postId } = req.params;
 
     const post = await Post.findOne({
-        where: {id: postId}
+        where: {id: postId},
+        include: { model: User,
+                   attributes: ['id', 'username', 'profileImg']}
     });
 
     res.status(200);
     res.json(post);
 })
 
-router.post('/', requireAuth, upload.any('filepath', 'thumbnail'), async ( req, res ) => {
+router.post('/', requireAuth, upload.single('filePath'), async ( req, res ) => {
     const { user } = req;
+    const { title, description } = req.body;
+    const file = req?.file
+
 
     if (!user) {
         const err = new Error()
@@ -81,42 +80,11 @@ router.post('/', requireAuth, upload.any('filepath', 'thumbnail'), async ( req, 
         return res.json(err)
     }
 
-    const files = [...req.files]
-
-    let imgFile;
-
-    let videoFile;
-
-    files.forEach((file) => {
-        // console.log(file)
-        if(file.mimetype === 'video/mp4') {
-            videoFile = file
-        } else {
-            imgFile = file
-        }
-    })
-
-    if(!videoFile) {
-        const err = new Error()
-        err.message = "Video required"
-        res.status(400)
-        return res.json(err)
-    }
-
-    if(!imgFile) {
-        const err = new Error()
-        err.message = "Thumbnail required"
-        res.status(400)
-        return res.json(err)
-    }
-
-    const { title, description } = req.body;
 
     const newPost = await Post.create({
         title: title,
         userId: user.id,
-        filepath: videoFile.key,
-        thumbnail: imgFile.key,
+        filepath: file?.location,
         description: description
     })
 
@@ -124,7 +92,7 @@ router.post('/', requireAuth, upload.any('filepath', 'thumbnail'), async ( req, 
     res.json(newPost)
 })
 
-router.put('/:postId', requireAuth, upload.any('filepath', 'thumbnail'), validatePost, async ( req, res ) => {
+router.put('/:postId', requireAuth, async ( req, res ) => {
     const { user } = req;
 
     if (!user) {
@@ -155,48 +123,31 @@ router.put('/:postId', requireAuth, upload.any('filepath', 'thumbnail'), validat
         return res.json(err)
     }
 
-    const files = [...req.files]
+    // const files = [...req.files]
 
-    let imgFile;
+    // let videoFile;
 
-    let videoFile;
+    // files.forEach((file) => {
+    //     // console.log(file)
+    //     if(file.mimetype === 'video/mp4') {
+    //         videoFile = file
+    //     }
+    // })
 
-    files.forEach((file) => {
-        // console.log(file)
-        if(file.mimetype === 'video/mp4') {
-            videoFile = file
-        } else {
-            imgFile = file
-        }
-    })
+    // if(!videoFile) {
+    //     const err = new Error()
+    //     err.message = "Video required"
+    //     res.status(400)
+    //     return res.json(err)
+    // }
 
-    if(!videoFile) {
-        const err = new Error()
-        err.message = "Video required"
-        res.status(400)
-        return res.json(err)
-    }
-
-    if(!imgFile) {
-        const err = new Error()
-        err.message = "Thumbnail required"
-        res.status(400)
-        return res.json(err)
-    }
-
-    if(videoFile.key !== post.filepath) {
-        await s3.deleteFileFromS3(post.filepath, null)
-    }
-
-    if(imgFile.key !== post.thumbnail) {
-        await s3.deleteFileFromS3(post.thumbnail, null)
-    }
+    // if(videoFile.location !== post.filepath) {
+    //     await s3.deleteFileFromS3(post.filepath, null)
+    // }
 
     const updatedPost = await post.update({
-        title,
-        filepath: videoFile.key,
-        thumbnail: imgFile.key,
-        description
+        title: title,
+        description: description
     })
 
     res.status(200)
@@ -214,6 +165,8 @@ router.delete('/:postId', requireAuth, async ( req, res ) => {
     }
 
     const { postId } = req.params;
+
+    console.log(postId)
 
     const post = await Post.findOne({
         where: {id: postId}
@@ -234,7 +187,6 @@ router.delete('/:postId', requireAuth, async ( req, res ) => {
     }
 
     await s3.deleteFileFromS3(post.filepath, null)
-    await s3.deleteFileFromS3(post.thumbnail, null)
     await post.destroy()
 
     res.status(200)
@@ -296,6 +248,14 @@ router.post('/:postId/comments', requireAuth, validateComment, async ( req, res 
         err.message = "Post couldn't be found"
         res.status(404)
         return res.json(err)
+    }
+
+    if(comment.slice(0, 1) === ' ' || comment.slice(-1) === ' ') {
+        const err = new Error()
+        err.message = 'comment cannot start or end with whitespacing'
+        res.status(400)
+        return res.json(err)
+
     }
 
     const newComment = await Comment.create({

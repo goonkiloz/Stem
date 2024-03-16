@@ -1,0 +1,61 @@
+.profile-dropdown {
+    position: absolute;
+    right: 110px;
+    /* width: 300px; */
+    height: 73px;
+    margin: 0;
+    border: 0px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 150px 150px;
+    justify-content: space-around;
+    align-items: center;
+    background-color: black;
+    color: white;
+    list-style: none;
+
+
+}
+
+.navbar-profile-container > button {
+    border-radius: 25px;
+    width: 50px;
+    height: 50px;
+  }
+
+.profile-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-between;
+    border-left: .5px solid;
+    height: 65px;
+    border-color: rgba(128, 128, 128, .5);
+}
+
+.profile-dropdown > div {
+  display: flex;
+  width: 150PX;
+  align-items: center;
+  justify-content: center;
+  border-left: .5px solid;
+  height: 65px;
+  border-color: rgba(128, 128, 128, .5);
+}
+
+.profile-dropdown > div > button {
+  background-color: black;
+  color: white;
+  border: none;
+  font-family: 'Roboto';
+  font-size: 16px;
+}
+
+.profile-dropdown button:hover {
+    cursor: pointer;
+  }
+
+
+.profile-dropdown-user-email {
+    cursor: auto
+}

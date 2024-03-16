@@ -1,0 +1,49 @@
+.feed-page {
+    display: grid;
+    padding-top: 75px;
+    grid-template-columns: 262px auto 262px;
+    grid-template-areas:
+    'followers feed sidebar';
+}
+
+.followers {
+    grid-area: followers;
+    background-color: black;
+    width: 262px;
+    height: 100%;
+}
+
+.feed{
+    top: 75px;
+    overflow: hidden;
+    background-color: #eceff1;
+    grid-area: feed;
+}
+
+.post {
+    display: flex;
+    margin: 75px ;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.video-div {
+    align-self: center;
+}
+
+.video-div > video{
+    position: relative;
+    object-fit: contain;
+    left: 0px;
+    top: 0px;
+    width: 1400px;
+    height: 750px;
+
+}
+
+.sidebar {
+    grid-area: sidebar;
+    background-color: black;
+    width: 262px;
+    height: 100%;
+}
