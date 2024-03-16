@@ -25,7 +25,7 @@ const FeedPage = () => {
 
     posts?.map((post) => {
         if(post?.userId !== userId){
-            nonUserPosts.push(post)
+            nonUserPosts?.push(post)
         }
     })
 

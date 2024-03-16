@@ -9,7 +9,7 @@ const DeletePostModal = ({post}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await dispatch(deletePostThunk(post.id))
+        await dispatch(deletePostThunk(post?.id))
             .then(closeModal)
             .catch(async (res) => {
                 if (res) {
