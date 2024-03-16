@@ -1,8 +1,15 @@
 'use strict';
+
+let options = {};
+options.tableName = 'Views';
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Views', {
+    await queryInterface.createTable(options, {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,12 +19,12 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
-        references: {model: 'Users', key: 'id'}
+        references: {model: 'Users', key: 'id', schema: options.schema}
       },
       postId: {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
-        references: {model: 'Posts', key: 'id'}
+        references: {model: 'Posts', key: 'id', schema: options.schema}
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +39,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Views');
+    await queryInterface.dropTable(options);
   }
 };
