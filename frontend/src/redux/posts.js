@@ -1,3 +1,6 @@
+import { csrfFetch } from "./csrf";
+import Cookies from "js-cookie";
+
 const GET_ALL_POSTS = "posts/getPosts";
 const GET_SINGLE_POST = "posts/getSinglePost";
 const GET_CURRENT_USER_POSTS = "posts/getCurrentUser";
@@ -107,31 +110,35 @@ export const getUserPostsThunk = (userId) => async (dispatch) => {
 };
 
 export const postPostThunk = (post) => async (dispatch) => {
-    try {
-        const res = await fetch("/api/posts/", {
-      method: "POST",
+
+    const options = {
+      method: 'POST',
       headers: {},
-      body: post,
-    });
+      body: post
+    }
+
+    options.headers['XSRF-Token'] = Cookies.get('XSRF-TOKEN')
+
+    const res = await fetch("/api/posts/", options)
 
     if (res.ok) {
-        const data = await res.json();
+        const data = res.json();
         dispatch(postPost(data));
         return data;
-    }
-    throw res;
-} catch (e) {
-    const data = await e.json();
-    return data;
-}
+    } else {
+      const err = await res.json();
+      return err;
+  }
 };
 
 export const putPostThunk = (post, postId) => async (dispatch) => {
-  try {
-    const res = await fetch(`/api/posts/${postId}`, {
+    const res = await csrfFetch(`/api/posts/${postId}`, {
       method: "PUT",
       headers: {},
-      body: post,
+      body: JSON.stringify({
+        title: post.title,
+        description: post.description
+      }),
     });
 
     if (res.ok) {
@@ -140,17 +147,14 @@ export const putPostThunk = (post, postId) => async (dispatch) => {
       dispatch(getCurrentUserPostsThunk());
       dispatch(getPostsThunk());
       return data;
+    } else {
+      const err = await res.json();
+      return err;
     }
-    throw res;
-  } catch (e) {
-    const data = await e.json();
-    return data;
-  }
 };
 
 export const deletePostThunk = (postId) => async (dispatch) => {
-  try {
-    const res = await fetch(`api/posts/${postId}`, {
+    const res = await csrfFetch(`/api/posts/${postId}`, {
       method: "DELETE",
     });
     if (res.ok) {
@@ -159,37 +163,41 @@ export const deletePostThunk = (postId) => async (dispatch) => {
       dispatch(getCurrentUserPostsThunk())
       dispatch(getPostsThunk());
       return data;
-    }
-    throw res;
-  } catch (e) {
-    return e;
+    } else {
+    const err = await res.json();
+    return err;
   }
 };
 
 const initialState = { allPosts: [], byId: {}, currentUserPosts: [], userPosts: []};
 
 const postsReducer = (state = initialState, action) => {
-  let newState = { ...state };
+  let newState;
   switch (action.type) {
     case GET_ALL_POSTS:
+      newState = { ...state }
       newState.allPosts = action.payload;
       action.payload.forEach((post) => {
         newState.byId[post.id] = post;
       });
       return newState;
     case GET_SINGLE_POST:
+      newState = { ...state }
       newState.byId[action.payload.id] = action.payload;
       return newState;
     case GET_CURRENT_USER_POSTS:
+      newState = { ...state }
       newState.currentUserPosts = action.payload;
       action.payload.forEach((post) => {
         newState.byId[post.id] = post;
       });
       return newState;
     case GET_USER_POSTS:
+      newState = { ...state }
       newState.userPosts = action.payload;
       return newState;
     case PUT_POST: {
+      newState = { ...state }
       const index = newState.allPosts.findIndex(
         (post) => post.id === action.payload.id
       );
@@ -198,10 +206,12 @@ const postsReducer = (state = initialState, action) => {
       return newState;
     }
     case POST_POST:
+      newState = { ...state }
       newState.allPosts.push(action.payload);
       newState.byId[action.payload.id] = action.payload;
       return newState;
     case DELETE_POST:
+      newState = { ...state }
       newState.allPosts = newState.allPosts.filter(
         (post) => post.id !== action.payload.postId
       );

@@ -137,7 +137,9 @@ const ProfilePage = () => {
                     <div className="user-videos">
                         {userPosts?.map((post) => {
                             return (
-                                <PostComponent post={post} />
+                                <div key={post.id} className="videos">
+                                    <PostComponent post={post} src={post?.filepath} key={post.id}/>
+                                </div>
                             )
                         })}
                     </div>

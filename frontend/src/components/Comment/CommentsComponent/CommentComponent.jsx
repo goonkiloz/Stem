@@ -1,7 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getCommentsThunk, postCommentThunk } from '../../redux/comments';
+import { getCommentsThunk, postCommentThunk } from '../../../redux/comments';
 import { useState, useEffect } from 'react';
+import OpenModalButton from "../../Global/OpenModalButton/OpenModalButtton";
+import EditCommentModal from "../EditCommentModal";
 import './Comment.css'
+import DeleteCommentModal from "../DeleteCommentModal/DeleteCommentModal";
 
 
 const CommentComponent = ({post}) => {
@@ -82,11 +85,30 @@ const CommentComponent = ({post}) => {
                             <div className="commentTime">
                                 {[new Date(comment?.createdAt).toLocaleDateString(undefined, options), ' ', new Date(comment?.createdAt).toLocaleTimeString('en-US')]}
                             </div>
-                            {/* {comment?.User?.profileImg} */}
+                            <div className="comment-buttons">
+
+                            {currentUser.id === comment.userId &&
+                            <div className="comment-edit-button">
+                                <OpenModalButton
+                                    modalComponent={<EditCommentModal comment={comment} postId={post.id}/>}
+                                    buttonText='Edit'
+                                    />
+                            </div>
+                            }
+                            {currentUser.id === comment.userId &&
+                            <div className="comment-delete-button">
+                                <OpenModalButton
+                                        modalComponent={<DeleteCommentModal commentId={comment.id}/>}
+                                        buttonText='Delete'
+                                        />
+                            </div>
+                            }
+                            </div>
                         </div>
                     </div>
                 ))}
                 </div>
+                {currentUser &&
                 <div>
                     <form className='comment-field' onSubmit={handleSubmit}>
                         <textarea
@@ -96,24 +118,25 @@ const CommentComponent = ({post}) => {
                             name='comment'
                             placeholder='Leave your comment here...'
                             rows='5'
-                        />
+                            />
                         <button
                             className='postreview-submit-button'
                             type='button'
                             onClick={handleSubmit}
                             disabled={comment?.length < 10}
-                        >
+                            >
                             Submit your comment
                         </button>
                     </form>
                     {validationErrors && (
                         <p className='review-form-error'>{validationErrors.message}</p>
-                    )}
+                        )}
                 </div>
+                }
             </div>
         </div>
     )
 }
 
 
-export default CommentComponent
+export default CommentComponent;

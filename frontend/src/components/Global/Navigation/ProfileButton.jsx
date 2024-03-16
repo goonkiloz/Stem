@@ -30,7 +30,6 @@ function ProfileButton() {
     }
     })
   }, [dispatch, user])
-  console.log(currUser)
 
 
   useEffect(() => {
@@ -69,7 +68,9 @@ function ProfileButton() {
           {user ? (
             <>
               <div>{currUser?.username}</div>
-              <div>{currUser?.email}</div>
+              <div>
+                <button onClick={() => navigate(`/user/${currUser.id}`)}>Profile</button>
+              </div>
               <div>
                 <button onClick={logout}>Log Out</button>
               </div>

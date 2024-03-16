@@ -12,12 +12,9 @@ const s3 = require('../../utils/aws.js')
 const { Post, Comment, User, Like, Dislike } = require('../../db/models');
 
 const validatePost = [
-    check('title')
+    check('filePath')
         .exists({ checkFalsy: true })
-        .withMessage('Title is required'),
-    check('description')
-        .exists({ checkFalsy: true })
-        .withMessage('Description is required'),
+        .withMessage('Video is required'),
     handleValidationErrors
 ]
 
@@ -70,8 +67,11 @@ router.get('/:postId', async ( req, res ) => {
     res.json(post);
 })
 
-router.post('/', requireAuth, upload.any('filepath'), async ( req, res ) => {
+router.post('/', requireAuth, upload.single('filePath'), async ( req, res ) => {
     const { user } = req;
+    const { title, description } = req.body;
+    const file = req?.file
+
 
     if (!user) {
         const err = new Error()
@@ -80,31 +80,11 @@ router.post('/', requireAuth, upload.any('filepath'), async ( req, res ) => {
         return res.json(err)
     }
 
-    const files = [...req.files]
-
-    let videoFile;
-
-    files.forEach((file) => {
-        // console.log(file)
-        if(file.mimetype === 'video/mp4') {
-            videoFile = file
-        }
-    })
-
-    if(!videoFile) {
-        const err = new Error()
-        err.message = "Video required"
-        res.status(400)
-        return res.json(err)
-    }
-
-
-    const { title, description } = req.body;
 
     const newPost = await Post.create({
         title: title,
         userId: user.id,
-        filepath: videoFile.location,
+        filepath: file?.location,
         description: description
     })
 
@@ -112,7 +92,7 @@ router.post('/', requireAuth, upload.any('filepath'), async ( req, res ) => {
     res.json(newPost)
 })
 
-router.put('/:postId', requireAuth, upload.any('filepath'), validatePost, async ( req, res ) => {
+router.put('/:postId', requireAuth, async ( req, res ) => {
     const { user } = req;
 
     if (!user) {
@@ -143,32 +123,31 @@ router.put('/:postId', requireAuth, upload.any('filepath'), validatePost, async 
         return res.json(err)
     }
 
-    const files = [...req.files]
+    // const files = [...req.files]
 
-    let videoFile;
+    // let videoFile;
 
-    files.forEach((file) => {
-        // console.log(file)
-        if(file.mimetype === 'video/mp4') {
-            videoFile = file
-        }
-    })
+    // files.forEach((file) => {
+    //     // console.log(file)
+    //     if(file.mimetype === 'video/mp4') {
+    //         videoFile = file
+    //     }
+    // })
 
-    if(!videoFile) {
-        const err = new Error()
-        err.message = "Video required"
-        res.status(400)
-        return res.json(err)
-    }
+    // if(!videoFile) {
+    //     const err = new Error()
+    //     err.message = "Video required"
+    //     res.status(400)
+    //     return res.json(err)
+    // }
 
-    if(videoFile.location !== post.filepath) {
-        await s3.deleteFileFromS3(post.filepath, null)
-    }
+    // if(videoFile.location !== post.filepath) {
+    //     await s3.deleteFileFromS3(post.filepath, null)
+    // }
 
     const updatedPost = await post.update({
-        title,
-        filepath: videoFile.location,
-        description
+        title: title,
+        description: description
     })
 
     res.status(200)
@@ -186,6 +165,8 @@ router.delete('/:postId', requireAuth, async ( req, res ) => {
     }
 
     const { postId } = req.params;
+
+    console.log(postId)
 
     const post = await Post.findOne({
         where: {id: postId}

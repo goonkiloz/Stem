@@ -4,6 +4,9 @@ import './PostComponent.css'
 import LikesComponent from "../../Likes/LikesComponent";
 import { getFollowingThunk, postFollowerThunk, removeFollowerThunk } from "../../../redux/followers";
 import { useEffect, useState } from "react";
+import OpenModalButton from "../../Global/OpenModalButton/OpenModalButtton";
+import EditPostModal from "../EditPostModal/EditPostModal";
+import DeletePostModal from "../DeletePostModal";
 
 
 const PostComponent = ({post}) => {
@@ -30,24 +33,26 @@ const PostComponent = ({post}) => {
     }
 
     useEffect(() => {
-        dispatch(getFollowingThunk(currentUser?.id))
-        .then(res => {
-            if(res.length > 0) {
-                console.log(res)
-                const check = res?.find(follower =>follower?.followingUser?.id === post?.userId)
-                console.log(check)
-                if(check){
-                    setFollower(true)
-                    setFollowerId(check?.id)
-                } else {
-                    setFollower(false)
-                    setFollowerId(null)
+        if(currentUser?.id) {
+            dispatch(getFollowingThunk(currentUser?.id))
+            .then(res => {
+                if(res.length > 0) {
+                    console.log(res)
+                    const check = res?.find(follower =>follower?.followingUser?.id === post?.userId)
+                    console.log(check)
+                    if(check){
+                        setFollower(true)
+                        setFollowerId(check?.id)
+                    } else {
+                        setFollower(false)
+                        setFollowerId(null)
+                    }
                 }
-            }
-        })
+            })
+        }
     }, [dispatch, currentUser, follower, post])
 
-    if(post?.userId !== currentUser?.id) {
+    if(currentUser && post?.userId !== currentUser?.id) {
         return (
             <div className="post-div">
                 <div className="video-div">
@@ -81,7 +86,7 @@ const PostComponent = ({post}) => {
                     </div>
                     {currentUser &&
                             <LikesComponent post={post}/>
-                        }
+                    }
                 </div>
             </div>
         )
@@ -96,9 +101,24 @@ const PostComponent = ({post}) => {
             </div>
             <div className="post-info">
                 <h3 className='post-title' onClick={() => navigate(`/posts/${post?.id}`)}>{post?.title}</h3>
+                <div className="post-user">
+                    <p>{post?.User?.username}</p>
+                </div>
                 {currentUser &&
-                        <LikesComponent post={post}/>
-                    }
+                    <LikesComponent post={post}/>
+                }
+                {currentUser &&
+                    <OpenModalButton
+                        modalComponent={<EditPostModal post={post}/>}
+                        buttonText={'Edit'}
+                    />
+                }
+                {currentUser &&
+                    <OpenModalButton
+                        modalComponent={<DeletePostModal post={post}/>}
+                        buttonText={'Delete'}
+                    />
+                }
             </div>
         </div>
     )

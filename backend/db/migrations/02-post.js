@@ -19,11 +19,6 @@ module.exports = {
       title: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'Title is required'
-          }
-        }
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -32,12 +27,6 @@ module.exports = {
       },
       filepath: {
         type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'filepath is required'
-          }
-        }
       },
       description: {
         type: Sequelize.STRING(1000),

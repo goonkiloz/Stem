@@ -138,28 +138,34 @@ export const removeFollowerThunk = (followerId) => async (dispatch) => {
 const initialState = { followers: [], following: [], followersById: {}, followingById: {}, currentUserFollowers: [], currentUserFollowing: [] };
 
 const followersReducer = (state = initialState, action) => {
-  const newState = { ...state };
+  let newState;
   switch (action.type) {
     case GET_CURRENT_USER_FOLLOWERS:
+      newState = { ...state }
       newState.currentUserFollowers = action.payload;
       return newState;
     case GET_CURRENT_USER_FOLLOWING:
+      newState = { ...state }
       newState.currentUserFollowing = action.payload;
       return newState;
     case GET_ALL_USER_FOLLOWERS:
+      newState = { ...state }
         newState.followers = action.payload;
         return newState;
     case GET_ALL_USER_FOLLOWING:
+        newState = { ...state }
         newState.following = action.payload;
         action.payload.forEach((follower) => {
             newState.followingById[follower.id] = follower;
         })
         return newState;
     case POST_FOLLOWER:
+        newState = { ...state }
         newState.followers.push(action.payload);
         return newState;
 
     case REMOVE_FOLLOWER:
+        newState = { ...state }
         newState.followers = newState.followers.filter(
             follower => follower.id !== action.payload
         );

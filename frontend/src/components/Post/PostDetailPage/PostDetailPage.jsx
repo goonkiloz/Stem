@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import FollowerSideBar from "../../Follower/FollowerSideBarComponent";
 import LikesComponent from "../../Likes/LikesComponent";
-import CommentsComponent from "../../Comment/CommentComponent";
+import CommentsComponent from "../../Comment/CommentsComponent/CommentComponent";
 import './PostDetail.css'
 
 const PostDetailPage = () => {
@@ -63,25 +63,29 @@ const PostDetailPage = () => {
                 <h3 className='post-title'>{post?.title}</h3>
                 <div className="post-user">
                     <p>{post?.User?.username}</p>
+                    {currentUser &&
+                    <>
                     {follower ? (
                         <>
-                            <div
-                                className="follow-button"
-                                onClick={handleFollow}
-                            >
-                                <i className="fa-solid fa-check"></i>
-                            </div>
+                        <div
+                        className="follow-button"
+                        onClick={handleFollow}
+                        >
+                        <i className="fa-solid fa-check"></i>
+                        </div>
                         </>
-                    ) : (
-                        <>
+                        ) : (
+                            <>
                             <div
-                                className="follow-button"
-                                onClick={handleFollow}
+                            className="follow-button"
+                            onClick={handleFollow}
                             >
-                                <i className="fa-solid fa-plus"></i>
+                            <i className="fa-solid fa-plus"></i>
                             </div>
+                            </>
+                            )}
                         </>
-                    )}
+                        }
                 </div>
             </div>
                 <div className="detail-video-div">

@@ -196,26 +196,31 @@ const initialState = { allLikes: [], likesByPostId: {}, allDislikes: [], dislike
 
 //create likes reducers to process actions
 const likesReducer = (state = initialState, action) => {
-  const newState = { ...state };
+  let newState;
   switch (action.type) {
     case GET_ALL_LIKES:
+        newState = { ...state }
         newState.allLikes = action.payload;
         return newState;
     case GET_ALL_DISLIKES:
+        newState = { ...state }
         newState.allDislikes = action.payload;
         return newState;
     case GET_ALL_LIKES_BY_POST:
+        newState = { ...state }
         newState.allLikes = action.payload;
         action.payload.forEach((like) => {
             newState.likesByPostId[like.postId] = like;
         });
         return newState;
     case POST_LIKE:
+        newState = { ...state }
         newState.allLikes.push(action.payload);
         newState.likesByPostId[action.payload.id] = action.payload;
         return newState;
 
     case REMOVE_LIKE:
+        newState = { ...state }
         newState.allLikes = newState.allLikes.filter(
             like => like.id !== action.payload
         );
@@ -223,6 +228,7 @@ const likesReducer = (state = initialState, action) => {
         return newState;
 
     case GET_ALL_DISLIKES_BY_POST:
+        newState = { ...state }
         newState.allDislikes = action.payload;
         action.payload.forEach((dislike) => {
             newState.dislikesByPostId[dislike.id] = dislike;
@@ -230,11 +236,13 @@ const likesReducer = (state = initialState, action) => {
         return newState;
 
       case POST_DISLIKE:
+        newState = { ...state }
         newState.allDislikes.push(action.payload);
         newState.dislikesByPostId[action.payload.id] = action.payload;
         return newState;
 
       case REMOVE_DISLIKE:
+        newState = { ...state }
         newState.allDislikes = newState.allDislikes.filter(
           dislike => dislike.id !== action.payload
         );

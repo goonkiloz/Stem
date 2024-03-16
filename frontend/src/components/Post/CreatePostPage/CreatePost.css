@@ -1,0 +1,36 @@
+.pageContainer {
+    display: grid;
+    padding-top: 75px;
+    grid-template-columns: 262px auto 262px;
+    grid-template-areas:
+    'followers form sidebar';
+    min-height: 1242px;
+}
+
+.form {
+    grid-area: form;
+    display: flex;
+    justify-content: center;
+
+    background-color: 	#ffffff;
+    margin-top: 10px;
+}
+
+.formContainer input,
+.formContainer textarea {
+    width: 99%;
+}
+
+
+.formContainer input[type="file"]:hover {
+    cursor: pointer;
+}
+
+
+.new-post-form-submit {
+    margin-bottom: 10px;
+}
+
+.signIn-redirect {
+    display: flex;
+}

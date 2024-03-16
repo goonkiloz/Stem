@@ -37,21 +37,16 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        len: [1, 50]
-      }
     },
     userId: {
       type: DataTypes.INTEGER,
     },
     filepath: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false,
-      len: [1, 1000]
+      allowNull: false
     },
   }, {
     sequelize,
