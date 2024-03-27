@@ -37,9 +37,9 @@ const PostComponent = ({post}) => {
             dispatch(getFollowingThunk(currentUser?.id))
             .then(res => {
                 if(res.length > 0) {
-                    console.log(res)
+                    // console.log(res)
                     const check = res?.find(follower =>follower?.followingUser?.id === post?.userId)
-                    console.log(check)
+                    // console.log(check)
                     if(check){
                         setFollower(true)
                         setFollowerId(check?.id)

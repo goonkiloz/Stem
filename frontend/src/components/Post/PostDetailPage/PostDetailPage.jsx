@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+// import { Suspense } from "react";
 import { getSinglePostThunk } from "../../../redux/posts";
 import { getFollowingThunk, postFollowerThunk, removeFollowerThunk } from "../../../redux/followers";
 import { useEffect, useState } from "react";
@@ -55,58 +56,64 @@ const PostDetailPage = () => {
     }
     return (
         <div className="detail-page">
-            <div className="followers">
-                <FollowerSideBar />
-            </div>
-            <div className="detail">
-            <div className="detail-post-info">
-                <h3 className='post-title'>{post?.title}</h3>
-                <div className="post-user">
-                    <p>{post?.User?.username}</p>
-                    {currentUser &&
-                    <>
-                    {follower ? (
+                <div className="followers">
+                    <FollowerSideBar />
+                </div>
+                <div className="detail">
+                <div className="detail-post-info">
+                    <h3 className='post-title'>{post?.title}</h3>
+                    <div className="post-user">
+                        <p>{post?.User?.username}</p>
+                        {currentUser &&
                         <>
-                        <div
-                        className="follow-button"
-                        onClick={handleFollow}
-                        >
-                        <i className="fa-solid fa-check"></i>
-                        </div>
-                        </>
-                        ) : (
+                        {follower ? (
                             <>
                             <div
                             className="follow-button"
                             onClick={handleFollow}
                             >
-                            <i className="fa-solid fa-plus"></i>
+                            <i className="fa-solid fa-check"></i>
                             </div>
                             </>
-                            )}
-                        </>
+                            ) : (
+                                <>
+                                <div
+                                className="follow-button"
+                                onClick={handleFollow}
+                                >
+                                <i className="fa-solid fa-plus"></i>
+                                </div>
+                                </>
+                                )}
+                            </>
+                            }
+                    </div>
+                </div>
+                    <div className="detail-video-div">
+                        <video controls>
+                            <source src={post?.filepath}/>
+                        </video>
+                    </div>
+                    <div className="detail-video-foot">
+                    <p>{post?.description}</p>
+                    {currentUser &&
+                            <LikesComponent post={post}/>
                         }
+                    </div>
+                    <div className="comment-container">
+                        {/* <Suspense fallback={ <Loading />}> */}
+                            <CommentsComponent post={post}/>
+                        {/* </Suspense> */}
+                    </div>
                 </div>
+                <div className="sidebar"/>
             </div>
-                <div className="detail-video-div">
-                    <video controls>
-                        <source src={post?.filepath}/>
-                    </video>
-                </div>
-                <div className="detail-video-foot">
-                <p>{post?.description}</p>
-                {currentUser &&
-                        <LikesComponent post={post}/>
-                    }
-                </div>
-                <div className="comment-container">
-                    <CommentsComponent post={post}/>
-                </div>
-            </div>
-            <div className="sidebar"/>
-        </div>
     )
 }
+
+// function Loading() {
+//     return <h2>🌀 Loading...</h2>;
+//   }
 
 
 export default PostDetailPage;
