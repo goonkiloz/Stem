@@ -1,7 +1,7 @@
 .pageContainer {
     display: grid;
     padding-top: 75px;
-    grid-template-columns: 262px auto 262px;
+    grid-template-columns: 17rem auto 16rem;
     grid-template-areas:
     'followers form sidebar';
     min-height: 1242px;

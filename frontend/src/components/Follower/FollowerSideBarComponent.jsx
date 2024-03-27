@@ -21,7 +21,7 @@ const FollowerSideBar = () => {
         dispatch(getUsersThunk())
     }, [dispatch, currentUser])
 
-    const popularUsers = users.sort(function(a, b) {
+    const popularUsers = users?.sort(function(a, b) {
         let keyA = a?.Followers?.length
         let keyB = b?.Followers?.length
 
@@ -30,7 +30,7 @@ const FollowerSideBar = () => {
         return 0;
     })
 
-    const newUsers = users.sort(function(a, b) {
+    const newUsers = users?.sort(function(a, b) {
         let keyA = a?.createdAt
         let keyB = b?.createdAt
 
@@ -64,7 +64,7 @@ const FollowerSideBar = () => {
             <div className="sidebar-following">
             <h3>Following</h3>
                 {following?.slice(0, 5).map((user) => {
-                    console.log(user)
+                    // console.log(user)
                     return(
                         <div key={user.id}>
                             <h4 onClick={() => navigate(`/user/${user?.followingUser?.id}`)}>{user?.followingUser?.username}</h4>

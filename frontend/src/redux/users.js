@@ -45,23 +45,27 @@ export const getSingleUserThunk = (userId) => async (dispatch) => {
 const initialState = { allUsers: [], byId: {}, currentUser: {}};
 
 const userReducer = (state = initialState, action) => {
-    let newState;
+    let newState = { ...state };
     switch (action.type) {
-        case GET_CURRENT_USER:
-            newState = { ...state }
+        case GET_CURRENT_USER: {
             newState.currentUser = action.payload;
             return newState;
-        case GET_USERS:
-            newState = { ...state }
-            newState.allUsers = action.payload;
+        }
+        case GET_USERS: {
+            let users = [ ...newState.allUsers]
+            users = action.payload
+            newState.allUsers = users
             action.payload.forEach(user => {
                 newState.byId[user.id] = user;
             })
             return newState
-        case GET_SINGLE_USER:
-            newState = { ...state }
-            newState.byId[action.payload.id] = action.payload;
+        }
+        case GET_SINGLE_USER: {
+            let user = newState.byId[action.payload.id]
+            user = action.payload;
+            newState.byId[action.payload.id] = user
             return newState;
+        }
         default:
             return state;
     }

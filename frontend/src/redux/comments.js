@@ -114,39 +114,40 @@ export const deleteCommentThunk = (commentId) => async (dispatch) => {
 const initialState = { allComments: [], byId: {} };
 
 const commentsReducer = (state = initialState, action) => {
-  let newState;
+  let newState = { ...state }
   switch (action.type) {
     case GET_ALL_COMMENTS_BY_POST_ID:
-      newState = { ...state }
       newState.allComments = action.payload;
       action.payload.forEach((comment) => {
         newState.byId[comment.id] = comment;
       });
       return newState;
 
-    case POST_COMMENT:
-      newState = { ...state }
-      newState.allComments.push(action.payload);
-      newState.byId[action.payload.id] = action.payload;
-      return newState;
-
-    case EDIT_COMMENT: {
-      newState = { ...state }
-      const index = newState.allComments.findIndex(
-        (comment) => comment.id === action.payload.id
-      );
-      newState.allComments[index] = action.payload;
+    case POST_COMMENT: {
+      let comments = [...newState.allComments, action.payload]
+      newState.allComments = comments
       newState.byId[action.payload.id] = action.payload;
       return newState;
     }
-
-    case REMOVE_COMMENT:
-      newState = { ...state }
-      newState.allComments = newState.allComments.filter(
-        (comment) => comment.id !== action.payload
+    case EDIT_COMMENT: {
+      let comments = [...newState.allComments]
+      const index = comments.findIndex(
+        (comment) => comment.id === action.payload.id
       );
-      delete newState.byId[action.payload];
+      comments[index] = action.payload;
+      newState.allComments = comments
+      newState.byId[action.payload.id] = action.payload;
       return newState;
+    }
+    case REMOVE_COMMENT: {
+      let comments = [...newState.allComments]
+      comments = comments.filter(
+        (comment) => comment.id !== action.payload
+        );
+      newState.allComments = comments;
+        delete newState.byId[action.payload];
+        return newState;
+      }
     default:
       return state;
   }

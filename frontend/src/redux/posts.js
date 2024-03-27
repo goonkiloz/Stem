@@ -144,7 +144,7 @@ export const putPostThunk = (post, postId) => async (dispatch) => {
     if (res.ok) {
       const data = await res.json();
       dispatch(putPost(data));
-      dispatch(getCurrentUserPostsThunk());
+      dispatch(getUserPostsThunk(data.userId));
       dispatch(getPostsThunk());
       return data;
     } else {
@@ -153,15 +153,14 @@ export const putPostThunk = (post, postId) => async (dispatch) => {
     }
 };
 
-export const deletePostThunk = (postId) => async (dispatch) => {
+export const deletePostThunk = (postId, userId) => async (dispatch) => {
     const res = await csrfFetch(`/api/posts/${postId}`, {
       method: "DELETE",
     });
     if (res.ok) {
       const data = await res.json();
       dispatch(deletePost(postId));
-      dispatch(getCurrentUserPostsThunk())
-      dispatch(getPostsThunk());
+      dispatch(getUserPostsThunk(userId))
       return data;
     } else {
     const err = await res.json();
@@ -169,54 +168,48 @@ export const deletePostThunk = (postId) => async (dispatch) => {
   }
 };
 
-const initialState = { allPosts: [], byId: {}, currentUserPosts: [], userPosts: []};
+const initialState = { allPosts: [], byId: {}, userPosts: []};
 
 const postsReducer = (state = initialState, action) => {
-  let newState;
+  let newState = { ...state };
   switch (action.type) {
     case GET_ALL_POSTS:
-      newState = { ...state }
       newState.allPosts = action.payload;
       action.payload.forEach((post) => {
         newState.byId[post.id] = post;
       });
       return newState;
     case GET_SINGLE_POST:
-      newState = { ...state }
       newState.byId[action.payload.id] = action.payload;
       return newState;
-    case GET_CURRENT_USER_POSTS:
-      newState = { ...state }
-      newState.currentUserPosts = action.payload;
-      action.payload.forEach((post) => {
-        newState.byId[post.id] = post;
-      });
-      return newState;
     case GET_USER_POSTS:
-      newState = { ...state }
       newState.userPosts = action.payload;
       return newState;
     case PUT_POST: {
-      newState = { ...state }
+      let posts = [...newState.allPosts]
       const index = newState.allPosts.findIndex(
         (post) => post.id === action.payload.id
       );
-      newState.allPosts[index] = action.payload;
+      posts[index] = action.payload;
+      newState.allPosts = posts
+      return newState;
+    }
+    case POST_POST: {
+      let posts = [...newState.allPosts, action.payload]
+      newState.allPosts = posts;
       newState.byId[action.payload.id] = action.payload;
       return newState;
     }
-    case POST_POST:
-      newState = { ...state }
-      newState.allPosts.push(action.payload);
-      newState.byId[action.payload.id] = action.payload;
-      return newState;
-    case DELETE_POST:
-      newState = { ...state }
-      newState.allPosts = newState.allPosts.filter(
+    case DELETE_POST: {
+
+      let posts = [...newState.allPosts]
+      posts = posts.filter(
         (post) => post.id !== action.payload.postId
-      );
-      delete newState.byId[action.payload];
-      return newState;
+        );
+        delete newState.byId[action.payload];
+        newState.allPosts = posts;
+        return newState;
+      }
     default:
       return state;
   }

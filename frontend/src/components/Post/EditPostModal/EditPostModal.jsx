@@ -62,7 +62,6 @@ const EditPostModal = ({post}) => {
     }
 
     return (
-        <div className="pageContainer">
             <div>
                 <form
                     onSubmit={handleSubmit}
@@ -104,7 +103,6 @@ const EditPostModal = ({post}) => {
                     </button>
                 </form>
             </div>
-        </div>
     );
 }
 
