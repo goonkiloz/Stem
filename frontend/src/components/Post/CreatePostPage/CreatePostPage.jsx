@@ -62,7 +62,7 @@ const CreatePostPage = () => {
     }
 
     const handleCancelSubmit = () => {
-        navigate(`/profile`)
+        navigate(`/feed`)
     }
 
     return (
@@ -118,6 +118,7 @@ const CreatePostPage = () => {
                     <button
                         type="button"
                         onClick={handleCancelSubmit}
+                        disabled={isButtonDisabled}
                         >
                         Cancel
                     </button>

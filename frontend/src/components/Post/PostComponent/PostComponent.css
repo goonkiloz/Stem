@@ -9,15 +9,21 @@
     display: grid;
     align-self: center;
     width: 1400px;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 90% 10%;
+    grid-template-rows: 50% 50%;
     grid-template-areas:
         'title likes'
         'user .'
     ;
 }
 
+.edit-button {
+    width: 50px;
+}
+
 .post-title {
     grid-area: title;
+    align-self: center;
     margin: 15px 0;
 }
 

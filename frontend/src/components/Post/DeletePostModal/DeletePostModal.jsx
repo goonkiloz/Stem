@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useModal } from '../../../context/Modal';
 import { deletePostThunk } from '../../../redux/posts';
 const DeletePostModal = ({post}) => {
     const dispatch = useDispatch();
+    const currentUser = useSelector(state => state?.session?.user)
     const [errors, setErrors] = useState({});
     const { closeModal } = useModal();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await dispatch(deletePostThunk(post?.id))
+        await dispatch(deletePostThunk(post?.id, currentUser?.id))
             .then(closeModal)
             .catch(async (res) => {
                 if (res) {

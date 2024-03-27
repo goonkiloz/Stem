@@ -30,15 +30,12 @@ const validateSignup = [
 ];
 
 // Sign up
-router.post('/', upload.single('profileImg'), validateSignup, async (req, res) => {
+router.post('/', validateSignup, async (req, res) => {
 
     const { email, password, firstName, lastName, username } = req.body;
 
-    const { location } = req.file;
-
     const hashedPassword = bcrypt.hashSync(password);
-    const user = await User.create({ email, username, firstName, lastName, hashedPassword, profileImg: key });
-
+    const user = await User.create({ email, username, firstName, lastName, hashedPassword, profileImg: "https://stem-project.s3.us-east-2.amazonaws.com/defaultUser.jpg"});
 
     const safeUser = {
         id: user.id,
@@ -46,7 +43,7 @@ router.post('/', upload.single('profileImg'), validateSignup, async (req, res) =
         lastName: user.lastName,
         email: user.email,
         username: user.username,
-        profileImg: location
+        profileImg: user.profileImg
     };
 
     await setTokenCookie(res, safeUser);

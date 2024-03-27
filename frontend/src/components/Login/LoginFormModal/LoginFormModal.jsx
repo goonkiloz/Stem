@@ -14,27 +14,23 @@ function LoginFormModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-
-    const serverResponse = await dispatch(
-      thunkLogin({
-        email,
-        password,
-      })
-    );
-
-    if (serverResponse) {
-      setErrors(serverResponse);
-    } else {
+    setErrors('')
+    await dispatch(thunkLogin({email, password}))
+    .then(() => {
       dispatch(getCurrentUserThunk())
       closeModal();
-    }
+    })
+    .catch(async (res) => {
+      const data = await res.json()
+      setErrors(data.errors)
+    })
   };
 
   return (
     <>
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
+      {errors.credential && <p>{errors.credential}</p>}
         <label>
           Email
           <input
@@ -44,7 +40,6 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.email && <p>{errors.email}</p>}
         <label>
           Password
           <input
@@ -54,7 +49,6 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.password && <p>{errors.password}</p>}
         <button type="submit">Log In</button>
         <button type='submit' className='demoUser' onClick={() => {
             setEmail('demo@user.io')
