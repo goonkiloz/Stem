@@ -1,3 +1,5 @@
+import { getUserPostsThunk } from "./posts";
+
 const GET_CURRENT_USER = 'users/getCurrentUser'
 const GET_USERS = "users/getAll";
 const GET_SINGLE_USER = "users/getSingleUser";
@@ -40,6 +42,7 @@ export const getSingleUserThunk = (userId) => async (dispatch) => {
     const res = await fetch(`/api/users/${userId}`);
     const data = await res.json();
     dispatch(getSingleUser(data))
+    dispatch(getUserPostsThunk(userId))
 };
 
 const initialState = { allUsers: [], byId: {}, currentUser: {}};
@@ -61,8 +64,7 @@ const userReducer = (state = initialState, action) => {
             return newState
         }
         case GET_SINGLE_USER: {
-            let user = newState.byId[action.payload.id]
-            user = action.payload;
+            let user = action.payload
             newState.byId[action.payload.id] = user
             return newState;
         }

@@ -223,7 +223,8 @@ router.get('/:userId/posts', async ( req, res ) => {
     }
 
     const post = await Post.findAll({
-        where: {userId: userId}
+        where: {userId: userId},
+        include: { model: User }
     })
 
     res.status(200)

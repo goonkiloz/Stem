@@ -160,6 +160,7 @@ export const deletePostThunk = (postId, userId) => async (dispatch) => {
     if (res.ok) {
       const data = await res.json();
       dispatch(deletePost(postId));
+      dispatch(getPostsThunk())
       dispatch(getUserPostsThunk(userId))
       return data;
     } else {
@@ -201,7 +202,6 @@ const postsReducer = (state = initialState, action) => {
       return newState;
     }
     case DELETE_POST: {
-
       let posts = [...newState.allPosts]
       posts = posts.filter(
         (post) => post.id !== action.payload.postId
