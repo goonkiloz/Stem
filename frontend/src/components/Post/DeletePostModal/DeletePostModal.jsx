@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useModal } from '../../../context/Modal';
-import { deletePostThunk } from '../../../redux/posts';
+import { deletePostThunk, getPostsThunk } from '../../../redux/posts';
 const DeletePostModal = ({post}) => {
     const dispatch = useDispatch();
     const currentUser = useSelector(state => state?.session?.user)
@@ -21,6 +21,7 @@ const DeletePostModal = ({post}) => {
 
     const handleCancel = (e) => {
         e.preventDefault();
+        dispatch(getPostsThunk())
         closeModal()
     };
 

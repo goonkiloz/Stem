@@ -21,9 +21,9 @@ const FollowerSideBar = () => {
         dispatch(getUsersThunk())
     }, [dispatch, currentUser])
 
-    const popularUsers = users?.sort(function(a, b) {
-        let keyA = a?.Followers?.length
-        let keyB = b?.Followers?.length
+    const popularUsers = users.sort(function(a, b) {
+        let keyA = a.Followers.length
+        let keyB = b.Followers.length
 
         if (keyA < keyB) return -1;
         if (keyA > keyB) return 1;
@@ -31,8 +31,8 @@ const FollowerSideBar = () => {
     })
 
     const newUsers = users?.sort(function(a, b) {
-        let keyA = a?.createdAt
-        let keyB = b?.createdAt
+        let keyA = a.createdAt
+        let keyB = b.createdAt
 
         if (keyA < keyB) return 1;
         if (keyA > keyB) return -1;
@@ -44,10 +44,10 @@ const FollowerSideBar = () => {
         {currentUser ? (
                 <div className="sidebar-followers">
                     <h3>Followers</h3>
-                    {followers?.slice(0, 5).map((user) => {
+                    {followers.slice(0, 5).map((user) => {
                         return(
                             <div key={user.id}>
-                                <h4 onClick={() => navigate(`/user/${user?.follower?.id}`)}>{user?.follower?.username}</h4>
+                                <h4 onClick={() => navigate(`/user/${user.follower.id}`)}>{user?.follower?.username}</h4>
                             </div>
                         )
                     })}
@@ -63,11 +63,11 @@ const FollowerSideBar = () => {
         {currentUser ? (
             <div className="sidebar-following">
             <h3>Following</h3>
-                {following?.slice(0, 5).map((user) => {
+                {following.slice(0, 5).map((user) => {
                     // console.log(user)
                     return(
                         <div key={user.id}>
-                            <h4 onClick={() => navigate(`/user/${user?.followingUser?.id}`)}>{user?.followingUser?.username}</h4>
+                            <h4 onClick={() => navigate(`/user/${user.followingUser.id}`)}>{user.followingUser.username}</h4>
                         </div>
                     )
                 })}
@@ -80,20 +80,20 @@ const FollowerSideBar = () => {
         )}
             <div className="sidebar-popular">
                 <h3>Popular</h3>
-                {popularUsers?.slice(0, 5).reverse().map((user) => {
+                {popularUsers.slice(0, 5).reverse().map((user) => {
                     return(
                     <div key={user.id}>
-                        <h4 onClick={() => navigate(`/user/${user?.id}`)}>{user?.username}</h4>
+                        <h4 onClick={() => navigate(`/user/${user.id}`)}>{user.username}</h4>
                     </div>
                     )
                 })}
             </div>
             <div className="sidebar-new">
                 <h3>New</h3>
-                {newUsers?.slice(0, 5).map((user) => {
+                {newUsers.slice(0, 5).map((user) => {
                     return(
                         <div key={user.id}>
-                            <h4 onClick={() => navigate(`/user/${user?.id}`)}>{user?.username}</h4>
+                            <h4 onClick={() => navigate(`/user/${user.id}`)}>{user.username}</h4>
                         </div>
                         )
                 })}
