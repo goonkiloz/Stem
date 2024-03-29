@@ -9,7 +9,7 @@ import DeleteCommentModal from "../DeleteCommentModal/DeleteCommentModal";
 
 const CommentComponent = ({post}) => {
     const comments = useSelector(state => state?.comments?.allComments)
-    const currentUser = useSelector((state) => state?.session?.user);
+    const currentUser = useSelector((state) => state?.session?.user?.user);
 
     const [comment, setComment] = useState();
     const [validationErrors, setValidationErrors] = useState({});
@@ -56,12 +56,39 @@ const CommentComponent = ({post}) => {
 
     };
 
+    console.log()
+
     if (!comments) return <div>Loading...</div>
 
     if (comments?.length === 0) {
         return(
             <div>
                 <div>Be the first to post a comment!</div>
+                {currentUser &&
+                <div>
+                    <form className='comment-field' onSubmit={handleSubmit}>
+                        <textarea
+                            className="textfield"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            name='comment'
+                            placeholder='Leave your comment here...'
+                            rows='5'
+                            />
+                        <button
+                            className='postreview-submit-button'
+                            type='button'
+                            onClick={handleSubmit}
+                            disabled={comment?.length < 10}
+                            >
+                            Submit your comment
+                        </button>
+                    </form>
+                    {validationErrors && (
+                        <p className='review-form-error'>{validationErrors?.message}</p>
+                        )}
+                </div>
+                }
             </div>
 
 

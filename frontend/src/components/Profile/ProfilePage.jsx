@@ -4,24 +4,25 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import './Profile.css'
 import { useDispatch, useSelector } from "react-redux";
-import { getSingleUserThunk } from "../../redux/users";
+import { getCurrentUserThunk, getSingleUserThunk } from "../../redux/users";
 import { getFollowingThunk, postFollowerThunk, removeFollowerThunk, getFollowersThunk } from "../../redux/followers";
 import { getUserPostsThunk } from "../../redux/posts";
 
 const ProfilePage = () => {
     const { userId } = useParams();
-    const user = useSelector(state => state?.users?.byId[userId])
+    const user = useSelector(state => state.users.byId[userId])
     const userPosts = useSelector(state => state?.posts?.userPosts)
     const [ follower, setFollower ] = useState(false)
     const [ followerId, setFollowerId] = useState()
     const [ followers, setFollowers ] = useState([])
     const [ following, setFollowing ] = useState([])
-    const currentUser = useSelector(state => state?.session?.user)
+    const currentUser = useSelector(state => state?.session?.user?.user)
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getSingleUserThunk(userId))
-    }, [dispatch, userId])
+        dispatch(getCurrentUserThunk())
+    }, [dispatch, userId, user, currentUser])
 
     useEffect(() => {
         dispatch(getFollowingThunk(currentUser?.id))
@@ -49,7 +50,7 @@ const ProfilePage = () => {
         .then(res => {
             setFollowers(res)
         })
-    }, [dispatch, userId])
+    }, [dispatch, userId, followers])
 
     useEffect(() => {
         dispatch(getFollowingThunk(userId))
@@ -84,14 +85,64 @@ const ProfilePage = () => {
         console.log(followers)
     }
 
-
     return (
+        <>
         <div className="profile-page">
             <div className="followers">
                 <FollowerSideBar />
             </div>
-            {currentUser?.id !== user?.id ? (
-                <div className="profile">
+
+            {currentUser?.id === user?.id ? (
+                    <div className="profile">
+                    <div className="user-card">
+                        <img className='profile-picture' src={user?.profileImg}/>
+                        <div className="user-info">
+                            <div className="username-button">
+                                <h2 className="user-username">{user?.username}</h2>
+                            </div>
+                            <div className="user-followers">
+                                <h3>Followers</h3>
+                                <div>
+                                    {followers?.map((follower) => {
+                                        return(
+                                            <>
+                                                <img src={follower?.follower?.profileImg}/>
+                                                <span>{follower?.follower?.username}</span>
+                                            </>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                            <div className="user-following">
+                                <h3>Following</h3>
+                                <div>
+                                    {following?.map((follower) => {
+                                        return(
+                                            <>
+                                                <img src={follower?.followingUser?.profileImg}/>
+                                                <span>{follower?.followingUser?.username}</span>
+                                            </>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="user-posts">
+                        <h3>{user?.username}&apos;s Posts</h3>
+                        <div className="user-videos">
+                            {userPosts?.map((post) => {
+                                return (
+                                    <div key={post.id} className="videos">
+                                        <PostComponent post={post} src={post?.filepath} key={post?.id}/>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+                </div>
+                ) : (
+                    <div className="profile">
                     <div className="user-card">
                         <img className='profile-picture' src={user?.profileImg}/>
                         <div className="user-info">
@@ -162,59 +213,11 @@ const ProfilePage = () => {
                         </div>
                     </div>
                 </div>
-                ) : (
-                    <div className="profile">
-                    <div className="user-card">
-                        <img className='profile-picture' src={user?.profileImg}/>
-                        <div className="user-info">
-                            <div className="username-button">
-                                <h2 className="user-username">{user?.username}</h2>
-                            </div>
-                            <div className="user-followers">
-                                <h3>Followers</h3>
-                                <div>
-                                    {followers?.map((follower) => {
-                                        return(
-                                            <>
-                                                <img src={follower?.follower?.profileImg}/>
-                                                <span>{follower?.follower?.username}</span>
-                                            </>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-                            <div className="user-following">
-                                <h3>Following</h3>
-                                <div>
-                                    {following?.map((follower) => {
-                                        return(
-                                            <>
-                                                <img src={follower?.followingUser?.profileImg}/>
-                                                <span>{follower?.followingUser?.username}</span>
-                                            </>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="user-posts">
-                        <h3>{user?.username}&apos;s Posts</h3>
-                        <div className="user-videos">
-                            {userPosts?.map((post) => {
-                                return (
-                                    <div key={post.id} className="videos">
-                                        <PostComponent post={post} src={post?.filepath} key={post?.id}/>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div>
-                </div>
                 )
                 }
             <div className="sidebar"/>
         </div>
+        </>
     )
 }
 

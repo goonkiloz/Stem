@@ -14,12 +14,17 @@ const PostDetailPage = () => {
     const post = useSelector(state => state?.posts?.byId[postId])
     const [ follower, setFollower ] = useState(false)
     const [ followerId, setFollowerId] = useState()
-    const currentUser = useSelector(state => state?.session?.user)
+    const [ isLoaded, setIsLoaded ] = useState(false)
+    const currentUser = useSelector(state => state?.session?.user?.user)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getSinglePostThunk(postId))
-    }, [dispatch, postId])
+        if(post) {
+            setIsLoaded(true)
+        } else {
+            dispatch(getSinglePostThunk(postId))
+        }
+    }, [dispatch, postId, post])
 
     useEffect(() => {
         dispatch(getFollowingThunk(currentUser?.id))
@@ -55,60 +60,62 @@ const PostDetailPage = () => {
         }
     }
     return (
-        <div className="detail-page">
-                <div className="followers">
-                    <FollowerSideBar />
-                </div>
-                <div className="detail">
-                <div className="detail-post-info">
-                    <h3 className='post-title'>{post?.title}</h3>
-                    <div className="post-user">
-                        <p>{post?.User?.username}</p>
-                        {currentUser &&
-                        <>
-                        {follower ? (
+            <div className="detail-page">
+                    <div className="followers">
+                        <FollowerSideBar />
+                    </div>
+                    {isLoaded &&
+                    <div className="detail">
+                    <div className="detail-post-info">
+                        <h3 className='post-title'>{post?.title}</h3>
+                        <div className="post-user">
+                            <p>{post?.User?.username}</p>
+                            {currentUser && currentUser?.id !== post?.userId &&
                             <>
-                            <div
-                            className="follow-button"
-                            onClick={handleFollow}
-                            >
-                            <i className="fa-solid fa-check"></i>
-                            </div>
-                            </>
-                            ) : (
+                            {follower ? (
                                 <>
                                 <div
                                 className="follow-button"
                                 onClick={handleFollow}
                                 >
-                                <i className="fa-solid fa-plus"></i>
+                                <i className="fa-solid fa-check"></i>
                                 </div>
                                 </>
-                                )}
-                            </>
+                                ) : (
+                                    <>
+                                    <div
+                                    className="follow-button"
+                                    onClick={handleFollow}
+                                    >
+                                    <i className="fa-solid fa-plus"></i>
+                                    </div>
+                                    </>
+                                    )}
+                                </>
+                                }
+                        </div>
+                    </div>
+                        <div className="detail-video-div">
+                            <video controls>
+                                <source src={post?.filepath}/>
+                            </video>
+                        </div>
+                        <div className="detail-video-foot">
+                        <p>{post?.description}</p>
+                        {currentUser &&
+                                <LikesComponent post={post}/>
                             }
+                        </div>
+                        <div className="comment-container">
+                            {/* <Suspense fallback={ <Loading />}> */}
+                                <CommentsComponent post={post}/>
+                            {/* </Suspense> */}
+                        </div>
                     </div>
+                    }
+                    <div className="sidebar"/>
                 </div>
-                    <div className="detail-video-div">
-                        <video controls>
-                            <source src={post?.filepath}/>
-                        </video>
-                    </div>
-                    <div className="detail-video-foot">
-                    <p>{post?.description}</p>
-                    {currentUser &&
-                            <LikesComponent post={post}/>
-                        }
-                    </div>
-                    <div className="comment-container">
-                        {/* <Suspense fallback={ <Loading />}> */}
-                            <CommentsComponent post={post}/>
-                        {/* </Suspense> */}
-                    </div>
-                </div>
-                <div className="sidebar"/>
-            </div>
-    )
+        )
 }
 
 // function Loading() {

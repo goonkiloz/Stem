@@ -116,12 +116,14 @@ const initialState = { allComments: [], byId: {} };
 const commentsReducer = (state = initialState, action) => {
   let newState = { ...state }
   switch (action.type) {
-    case GET_ALL_COMMENTS_BY_POST_ID:
-      newState.allComments = action.payload;
+    case GET_ALL_COMMENTS_BY_POST_ID: {
+      let comments = action.payload
+      newState.allComments = comments;
       action.payload.forEach((comment) => {
         newState.byId[comment.id] = comment;
       });
       return newState;
+    }
 
     case POST_COMMENT: {
       let comments = [...newState.allComments, action.payload]
