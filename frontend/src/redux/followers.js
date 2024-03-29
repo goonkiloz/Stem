@@ -150,9 +150,7 @@ const followersReducer = (state = initialState, action) => {
       newState.currentUserFollowing = action.payload;
       return newState;
     case GET_ALL_USER_FOLLOWERS: {
-
-      let followers = [...newState.followers]
-      followers = action.payload;
+      let followers = action.payload;
       newState.followers = followers
       return newState;
     }

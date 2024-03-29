@@ -24,27 +24,24 @@ const EditPostModal = ({post}) => {
             description: description
         }
 
-        console.log(title)
-        console.log(description)
-
         let errors = {};
-        if(title?.length === 0) {
-            console.log(title)
+        if(title?.length === 0 && title?.startsWith(' ')) {
             errors.title = 'title is required'
+        } else if(title.startsWith(' ') || title.endsWith(' ')) {
+            errors.title = 'title cannot have whitespace'
         }
-        if(description?.length === 0) {
-            console.log(title)
+        if(description?.length === 0 && description?.startsWith(' ')) {
             errors.description = 'description is required'
+        } else if(description.startsWith(' ') || description.endsWith(' ')) {
+            errors.description = 'description cannot have whitespace'
         }
 
-        console.log(errors)
 
         if (errors?.title || errors?.description) {
             setValidationErrors(errors)
             setButtonDisabled(false)
         } else if(!errors?.title && !errors?.description) {
             const res = await dispatch(putPostThunk(updatedPost, post?.id));
-            console.log(res)
 
             if (!res.id) {
                 setValidationErrors(res);

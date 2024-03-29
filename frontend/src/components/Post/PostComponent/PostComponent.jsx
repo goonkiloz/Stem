@@ -12,7 +12,7 @@ import DeletePostModal from "../DeletePostModal";
 const PostComponent = ({post}) => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
-    const currentUser = useSelector(state => state?.session?.user)
+    const currentUser = useSelector(state => state?.session?.user?.user)
     const [ follower, setFollower ] = useState(false)
     const [ followerId, setFollowerId] = useState()
 
@@ -51,6 +51,7 @@ const PostComponent = ({post}) => {
             })
         }
     }, [dispatch, currentUser, follower, post])
+
 
     if(currentUser && post?.userId !== currentUser?.id) {
         return (
@@ -104,9 +105,6 @@ const PostComponent = ({post}) => {
                 <div className="post-user">
                     <p>{post?.User?.username}</p>
                 </div>
-                {currentUser &&
-                    <LikesComponent post={post}/>
-                }
                 {currentUser &&
                     <OpenModalButton
                         modalComponent={<EditPostModal post={post}/>}
