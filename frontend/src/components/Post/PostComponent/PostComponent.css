@@ -25,6 +25,7 @@
     grid-area: title;
     align-self: center;
     margin: 15px 0;
+    cursor: pointer;
 }
 
 .post-user {

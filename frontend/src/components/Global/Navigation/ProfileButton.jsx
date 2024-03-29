@@ -14,7 +14,6 @@ function ProfileButton() {
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate()
   const user = useSelector((store) => store?.session?.user);
-  const [ currUser, setCurrUser] = useState({})
   const ulRef = useRef();
 
   const toggleMenu = async (e) => {
@@ -24,11 +23,6 @@ function ProfileButton() {
 
   useEffect(() => {
     dispatch(getCurrentUserThunk())
-    .then((res) => {
-      if(res?.user?.id !== user?.id) {
-        return setCurrUser(res.user)
-    }
-    })
   }, [dispatch, user])
 
 
@@ -50,7 +44,6 @@ function ProfileButton() {
 
   const logout = (e) => {
     e.preventDefault();
-    setCurrUser(null)
     navigate('/')
     dispatch(thunkLogout());
     closeMenu();
@@ -67,9 +60,9 @@ function ProfileButton() {
         <ul className={"profile-dropdown"} ref={ulRef}>
           {user ? (
             <>
-              <div>{currUser?.username}</div>
+              <div>{user?.username}</div>
               <div>
-                <button onClick={() => navigate(`/user/${currUser?.id}`)}>Profile</button>
+                <button onClick={() => navigate(`/user/${user?.id}`)}>Profile</button>
               </div>
               <div>
                 <button onClick={logout}>Log Out</button>

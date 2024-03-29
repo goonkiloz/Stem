@@ -56,37 +56,54 @@
 .sidebar-followers > h3 {
     margin: 10px 0;
     font-size: 30px;
+    cursor: default;
 }
+
+.sidebar-followers > p {
+    cursor: default;
+}
+
 .sidebar-following > h3 {
     margin: 10px 0;
     font-size: 30px;
+    cursor: default;
+}
+
+.sidebar-following > p {
+    cursor: default;
 }
 .sidebar-popular > h3 {
     margin: 10px 0;
     font-size: 30px;
+    cursor: default;
 }
 
 .sidebar-new > h3 {
     margin: 10px 0;
     font-size: 30px;
+    cursor: default;
 }
 
 .sidebar-followers > div > h4 {
     margin: 10px 0;
     font-size: 18px;
+    cursor: pointer;
 }
 .sidebar-following > div > h4 {
     margin: 10px 0;
     font-size: 18px;
+    cursor: pointer;
 }
 .sidebar-popular > div > h4 {
     margin: 10px 0;
     font-size: 18px;
+    cursor: pointer;
 }
 
 .sidebar-new > div > h4 {
     margin: 10px 0;
     font-size: 18px;
+    cursor: pointer;
 }
 
 @media screen and (width: 412px){

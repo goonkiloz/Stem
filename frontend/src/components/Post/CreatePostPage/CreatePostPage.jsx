@@ -28,16 +28,18 @@ const CreatePostPage = () => {
         formData.append("filePath", filePath);
         let errors = {};
 
-        if(title?.length === 0) {
-            console.log(title)
+        if(title.length === 0) {
             errors.title = 'title is required'
         }
-        if(description?.length === 0) {
-            console.log(title)
+         else if((title.startsWith(' ') || title.endsWith(' ')) && title.length > 0) {
+            errors.title = 'title cannot contain whitespaces'
+        }
+        if(description.length === 0) {
             errors.description = 'description is required'
+        }else if((description.startsWith(' ') || description.endsWith(' ')) && description.length > 0) {
+            errors.description = 'description cannot contain whitespaces'
         }
         if(filePath === null) {
-            console.log(title)
             errors.filePath = 'filePath is required'
         }
 

@@ -25,12 +25,12 @@ const EditPostModal = ({post}) => {
         }
 
         let errors = {};
-        if(title?.length === 0 && title?.startsWith(' ')) {
+        if(title?.length === 0) {
             errors.title = 'title is required'
         } else if(title.startsWith(' ') || title.endsWith(' ')) {
             errors.title = 'title cannot have whitespace'
         }
-        if(description?.length === 0 && description?.startsWith(' ')) {
+        if(description?.length === 0) {
             errors.description = 'description is required'
         } else if(description.startsWith(' ') || description.endsWith(' ')) {
             errors.description = 'description cannot have whitespace'
