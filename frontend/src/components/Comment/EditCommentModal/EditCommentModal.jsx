@@ -29,6 +29,8 @@ function EditCommentModal({comment, postId}) {
 
         if(newComment.startsWith(' ') || newComment.endsWith(' ')) {
             errors.comment = 'comments cannot have whitespaces'
+        } else if (newComment.length <= 10) {
+            errors.comment = 'comment must be at least 10 characters'
         }
 
         if(errors.comment) {
@@ -58,11 +60,6 @@ function EditCommentModal({comment, postId}) {
     return (
         <div className='edit-comment modalContainer'>
             <h1 className='title'>Update Your Comment</h1>
-
-            {validationErrors && (
-                <p className='comment form-error'>{validationErrors?.comment}</p>
-            )}
-
             <form className='comment-form' onSubmit={handleConfirmSubmit}>
                 <textarea className='post-comment-form-input'
                     value={newComment}
@@ -70,13 +67,15 @@ function EditCommentModal({comment, postId}) {
                     name='comment'
                     placeholder='Leave your comment here...'
                     rows='5'
-                >
+                    >
                 </textarea>
+                {validationErrors && (
+                    <p className='comment form-error'>{validationErrors?.comment}</p>
+                )}
                 <button className='confirm-submit-button'
                     type='button'
                     onClick={handleConfirmSubmit}
-                    disabled={newComment?.length < 10}
-                >
+                    >
                     Yes
                 </button>
                 <button className='cancel-submit-button'
