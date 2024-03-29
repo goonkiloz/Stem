@@ -25,15 +25,27 @@ function EditCommentModal({comment, postId}) {
             comment: newComment
         }
 
+        let errors = {};
 
-        const res = await dispatch(editCommentThunk(comment, commentId, postId));
-
-
-        if (!res.id) {
-            setValidationErrors(res);
-        } else {
-            closeModal()
+        if(newComment.startsWith(' ') || newComment.endsWith(' ')) {
+            errors.comment = 'comments cannot have whitespaces'
         }
+
+        if(errors.comment) {
+            setValidationErrors(errors)
+        } else if(!errors.comment) {
+
+            const res = await dispatch(editCommentThunk(comment, commentId, postId));
+
+
+            if (!res.id) {
+                setValidationErrors(res);
+            } else {
+                closeModal()
+            }
+
+        }
+
 
     };
 
