@@ -189,18 +189,18 @@ const ProfilePage = () => {
                 </>
             ) : (
             <>
-            { currentUser.id === user.id ? (
+            { currentUser.id === user?.id ? (
                     <div className="profile">
                     <div className="user-card">
-                        <img className='profile-picture' src={user.profileImg}/>
+                        <img className='profile-picture' src={user?.profileImg}/>
                         <div className="user-info">
                             <div className="username-button">
-                                <h2 className="user-username">{user.username}</h2>
+                                <h2 className="user-username">{user?.username}</h2>
                             </div>
                             <div className="user-followers">
                                 <h3>Followers</h3>
                                 <div>
-                                    {followers.map((follower) => {
+                                    {followers?.map((follower) => {
                                         return(
                                             <>
                                                 <img src={follower.follower.profileImg}/>
