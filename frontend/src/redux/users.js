@@ -51,7 +51,8 @@ const userReducer = (state = initialState, action) => {
     let newState = { ...state };
     switch (action.type) {
         case GET_CURRENT_USER: {
-            newState.currentUser = action.payload;
+            let currentUser = action.payload
+            newState.currentUser = currentUser;
             return newState;
         }
         case GET_USERS: {
