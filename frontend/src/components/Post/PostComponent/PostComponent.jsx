@@ -83,7 +83,7 @@ const PostComponent = ({post}) => {
                         <div className="post-info">
                             <h3 className='post-title' onClick={() => navigate(`/posts/${post.id}`)}>{post.title}</h3>
                             <div className="post-user">
-                                    <p>{post.User.username}</p>
+                                    <p>{post?.User?.username}</p>
                                     {follower ? (
                                         <>
                                             <div
