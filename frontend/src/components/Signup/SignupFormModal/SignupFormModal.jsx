@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useModal } from "../../../context/Modal";
 import { thunkSignup } from "../../../redux/session";
 import "./SignupForm.css";
+import { getCurrentUserThunk } from "../../../redux/users";
 
 function SignupFormModal() {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ function SignupFormModal() {
       })
     )
     .then(() => {
+      dispatch(getCurrentUserThunk())
       closeModal()
     })
     .catch(async (res) => {

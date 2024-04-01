@@ -12,8 +12,10 @@ import { getCurrentUserThunk } from "../../../redux/users";
 function ProfileButton() {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
+  const [currentUser, setCurrentUser ] = useState({})
+  const [isLoaded, setIsLoaded] = useState(false)
   const navigate = useNavigate()
-  const user = useSelector((store) => store?.session?.user);
+  const user = useSelector((store) => store.session.user);
   const ulRef = useRef();
 
   const toggleMenu = async (e) => {
@@ -22,7 +24,14 @@ function ProfileButton() {
   };
 
   useEffect(() => {
-    dispatch(getCurrentUserThunk())
+    if(!user && user !== null) {
+      dispatch(getCurrentUserThunk())
+      setCurrentUser(user)
+    } else if(user === null) {
+      setCurrentUser(null)
+    } else {
+      setCurrentUser(user)
+    }
   }, [dispatch, user])
 
 
@@ -49,20 +58,30 @@ function ProfileButton() {
     closeMenu();
   };
 
+  useEffect(() => {
+    if(currentUser === null) {
+      setIsLoaded(true)
+    } else if(currentUser !== null && currentUser.username) {
+      setIsLoaded(true)
+    }
+  }, [currentUser])
+
+  console.log(currentUser)
+
   return (
 
     <>
       <button onClick={toggleMenu}>
         <i className="fas fa-user-circle" />
       </button>
-      {/* {user?.username && console.log(user?.username)} */}
-      {showMenu && (
+
+      {showMenu && isLoaded && (
         <ul className={"profile-dropdown"} ref={ulRef}>
-          {user ? (
+          {currentUser ? (
             <>
-              <div>{user?.username}</div>
+              <div>{currentUser.username}</div>
               <div>
-                <button onClick={() => navigate(`/user/${user?.id}`)}>Profile</button>
+                <button onClick={() => navigate(`/user/${currentUser?.id}`)}>Profile</button>
               </div>
               <div>
                 <button onClick={logout}>Log Out</button>
