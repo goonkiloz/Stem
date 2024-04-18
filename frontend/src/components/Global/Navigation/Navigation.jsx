@@ -18,7 +18,7 @@ function Navigation() {
   <div className="page-container">
     <div className="navbar-container">
     <NavLink>
-      <img className="navbar-logo" src="../logo.jpg" alt="Home"/>
+      <img className="navbar-logo" src="../favicon-32x32.png" alt="Home"/>
     </NavLink>
 
     <NavLink className='navbar-feed' to='/feed'>
