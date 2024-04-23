@@ -8,7 +8,7 @@
 .post-info {
     display: grid;
     align-self: center;
-    width: 1400px;
+    width: 100%;
     grid-template-columns: 90% 10%;
     grid-template-rows: 50% 50%;
     grid-template-areas:
@@ -17,8 +17,13 @@
     ;
 }
 
-.edit-button {
-    width: 50px;
+.post-info > button {
+    justify-self: flex-end;
+    align-self: center;
+    border-radius: 10px;
+    width: 75px;
+    height: 30px;
+    background-color: rgba(32, 223, 150, 0.616);
 }
 
 .post-title {
@@ -93,3 +98,13 @@
     margin-left: 10px;
     font-size: 20px;
 } */
+
+
+@media (max-width: 1624px) {
+    .post-div{
+        width: 100%;
+    }
+    .post-info{
+        width: 100%;
+    }
+}

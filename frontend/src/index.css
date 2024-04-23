@@ -8,13 +8,29 @@ body {
     margin-top: 0px;
 }
 
+html {
+    scroll-snap-type: y mandatory;
+}
+
 /* button:hover {
     background-color: #ff0000;
 } */
+div#modal-content{
+    display: flex;
+    flex-direction: column;
+}
 
-.modalContainer {
-    padding: 20px;
-    border-radius: 5px;
+#modal-content{
+    border-radius: 10px;
+    padding: 20px
+}
+
+#modal-background{
+    background-color: rgba(122, 121, 121, 0.767);
+}
+
+#modal-content > h1{
+    align-self: center;
 }
 
 .modalContainer label {
@@ -54,9 +70,12 @@ body {
 
 
 .formContainer {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     width: 800px;
     padding: 20px;
+    border-radius: 10px;
     background-color: #ffffff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
@@ -64,6 +83,7 @@ body {
 .formContainer label {
     display: block;
     margin-bottom: 10px;
+    align-content: center;
 }
 
 .formContainer textarea {
@@ -95,9 +115,12 @@ body {
 
 .formContainer button {
     display: block;
-    width: 100%;
+    width: 50%;
     padding: 10px;
-    background-color: #083100;
+    margin-top: 5px;
+    justify-self: center;
+    align-self: center;
+    background-color: black;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -110,7 +133,20 @@ body {
 }
 
 .formContainer button:hover {
-    background-color: #ff0000;
+    background-color: #549446;
+}
+
+.splash-page-footer {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.splash-page-footer a{
+    margin: 10px;
+    text-decoration: none;
+    color:#8c8c8c
 }
 
 /* @media screen and (width: 412px){

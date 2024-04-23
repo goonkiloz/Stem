@@ -15,12 +15,14 @@
 
 .feed{
     top: 75px;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     background-color: #eceff1;
     grid-area: feed;
 }
 
 .post {
+    scroll-snap-align: center;
     display: flex;
     margin: 75px ;
     flex-wrap: nowrap;
@@ -29,6 +31,8 @@
 
 .video-div {
     align-self: center;
+    height: 700px;
+    width: 100%;
 }
 
 .video-div > video{
@@ -36,8 +40,9 @@
     object-fit: contain;
     left: 0px;
     top: 0px;
-    width: 1400px;
-    height: 750px;
+    background-color:black;
+    width: 100%;
+    height: 100%;
 
 }
 
@@ -47,3 +52,84 @@
     width: 262px;
     height: 100%;
 }
+
+@media (max-width: 1924px) {
+    .feed-page {
+        display: grid;
+        padding-top: 75px;
+        grid-template-columns: 14% 86%;
+        grid-template-areas:
+        'followers feed';
+    }
+
+    .followers {
+        grid-area: followers;
+        display: flex;
+        background-color: black;
+        width: 262px;
+        height: 100%;
+    }
+
+    .feed{
+        top: 75px;
+        width: 100%;
+        background-color: #eceff1;
+        grid-area: feed;
+    }
+
+    /* .post {
+        display: flex;
+        margin: 75px ;
+        flex-wrap: nowrap;
+        justify-content: center;
+    } */
+
+    /* .video-div {
+        align-self: center;
+    } */
+
+    /* .video-div > video{
+        position: relative;
+        object-fit: contain;
+        left: 0px;
+        top: 0px;
+        width: 1400px;
+        height: 750px;
+
+    } */
+  }
+
+  @media (max-width: 1624px) {
+    .feed-page {
+        display: grid;
+        padding-top: 75px;
+        grid-template-columns: 100%;
+        grid-template-areas:
+        'feed';
+    }
+
+    .feed{
+        width: 100%;
+        grid-area: feed;
+    }
+
+    .post {
+        display: flex;
+        scroll-margin-top: 80px;
+        width: 100%;
+        margin: 0;
+        margin-bottom: 10px;
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+
+    .video-div {
+        width: 100%;
+
+    }
+
+    .video-div > video{
+        object-fit: fill;
+        width: 100%;
+    }
+  }
