@@ -8,6 +8,7 @@ video{
     float: right;
     bottom: 600px;
     right: 15%;
-    object-fit: conver;
+    object-fit: contain;
     opacity: .9;
 }
+

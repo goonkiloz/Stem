@@ -19,11 +19,11 @@
 }
 
 .likesContainer .filled {
-    color:green;
+    color:#549446;
     font-size: 25px;
 }
 .likesContainer .empty {
-    color: #8c8c8c;
+    color: black;
     font-size: 25px;
 }
 
@@ -38,10 +38,10 @@
 }
 
 .dislikesContainer .filled {
-    color:green;
+    color:rgb(212, 76, 76);
     font-size: 25px;
 }
 .dislikesContainer .empty {
-    color: #8c8c8c;
+    color: black;
     font-size: 25px;
 }
