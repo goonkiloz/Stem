@@ -129,13 +129,13 @@ const PostComponent = ({post}) => {
                     {currentUser &&
                         <OpenModalButton
                             modalComponent={<EditPostModal post={post}/>}
-                            buttonText={'Edit'}
+                            buttonText={<i className="fa fa-pencil"></i>}
                         />
                     }
                     {currentUser &&
                         <OpenModalButton
                             modalComponent={<DeletePostModal post={post}/>}
-                            buttonText={'Delete'}
+                            buttonText={<i className="fa fa-trash" aria-hidden="true"></i>}
                         />
                     }
                 </div>

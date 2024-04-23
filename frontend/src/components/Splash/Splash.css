@@ -37,13 +37,22 @@
 }
 
 .splash-join-button {
+    display: flex;
+    justify-content: center;
     align-self: center;
     width: 200px;
     height: 50px;
     background-color: black;
     color: white;
     border: none;
+    border-radius: 15px;
+}
+
+.splash-join-button > button {
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+    border: none;
+    width: 100%;
     font-family: 'Roboto';
     font-size: 16px;
-    border-radius: 15px;
 }

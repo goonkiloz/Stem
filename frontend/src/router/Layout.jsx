@@ -18,6 +18,12 @@ export default function Layout() {
         <Navigation />
         {isLoaded && <Outlet />}
         <Modal />
+        <footer className="splash-page-footer">
+        <p>©2024 Developed by Brendan Fosse for educational purpose</p>
+                <div>
+                    <a href="https://github.com/goonkiloz" target="_blank" rel="noreferrer">Brendan&apos;s Github </a>
+                </div>
+        </footer>
       </ModalProvider>
     </>
   );

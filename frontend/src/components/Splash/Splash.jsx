@@ -3,9 +3,10 @@ import { useDispatch } from 'react-redux';
 import { getPostsThunk } from '../../redux/posts';
 import './Splash.css'
 import VideoPlayer from '../VideoPlayer/VideoPlayerComponent';
+import SignupFormModal from "../Signup/SignupFormModal";
+import OpenModalButton from '../Global/OpenModalButton/OpenModalButtton';
 
 const Splash = () => {
-
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -43,9 +44,12 @@ const Splash = () => {
       </div>
       <div className='splash-bottom'>
         <h2 className='splash-bottom-text'>Join the community today!</h2>
-        <button
-          className='splash-join-button'
-        >Join</button>
+        <div className="splash-join-button">
+          <OpenModalButton
+            buttonText="Join!"
+            modalComponent={<SignupFormModal />}
+          />
+        </div>
       </div>
     </div>
   );
