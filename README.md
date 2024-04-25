@@ -2,22 +2,30 @@
 
 Stem is a video sharing platform, modeled after the popular platform Vine. This API has close to the same functionality as most video sharing platforms, such as posting, commenting, liking, disliking, and following. The app was developed with Express and postgres in the backend and react.js as the frontend
 
+![StemGif](img/Stem.gif)
+
 ## MVP- Feature & Implementation
 
 **Sign-up and Sign-in**
 * The server allows the new user to sign up an account using the sign-up link in the Navigation bar when current session of the user is = 'null'. A popup modal is then shown when sign-up link is clicked. All info on the forms are required to be properly filled out in order to create a user, else the server will return errors from the Express backend. The sign-up button is also grey out unless all info are filled out.
+
+![Login](img/Login.png)
+![SignUp](img/SignUp.png)
 
 **Full CURD of Posts**
 * Users should be able to view all posts regardless of the sign-in status.
 * Users should be able to upload posts only when signed in.
 * Users should be able to update their uploaded posts only when signed in.
 * Users should be able to delete their uploaded posts only when signed in.
+![Feed](img/FeedPage.png)
+![PostDetailPage](img/PostDetailPage.png)
 
 **Full CURD of Comment**
 * Users should be able to view all comments on a post regardless of sign-in status.
 * Users should be able to add a comment to a post only when signed in.
 * Users should be able to update their comment on a post only when signed in.
 * Users should be able to remove their comments from a post when signed in.
+![Comment](img/Comments.png)
 
 **Likes/Dislikes**
 * Users should be able to view the likes on a post regarless of signed-in status.
