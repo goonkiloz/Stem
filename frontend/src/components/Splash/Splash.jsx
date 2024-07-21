@@ -19,7 +19,7 @@ const Splash = () => {
       <div className='splash-page-head'>
         <img className='splash-page-backdrop' src='../../backdrop.jpg'/>
         <span className='splash-page-span'>
-          Welcome To Stem!
+          Welcome to Stem! Look around and have a laugh!
         </span>
         <div className='video-player' >
           <VideoPlayer />

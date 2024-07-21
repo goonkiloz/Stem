@@ -13,13 +13,13 @@
 
 .splash-page-span {
     position: relative;
-    word-spacing: 300px;
-    font-size: 100px;
+    word-spacing: 20px;
+    font-size: 70px;
     color: black;
     width: 600px;
     height: 450px;
     float: left;
-    bottom: 530px;
+    bottom: 550px;
     left: 15%;
 }
 
