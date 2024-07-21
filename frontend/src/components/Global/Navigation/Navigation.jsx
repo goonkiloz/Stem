@@ -9,6 +9,15 @@ function Navigation() {
   // const currentUser = useSelector(state => state.session.user)
   const [search, setSearch] = useState('')
 
+  const fetchData = (value) => {
+    return value
+  }
+
+  const handleChange = (value) => {
+    setSearch(value)
+    fetchData(value)
+  }
+
     const handleOnClick = (e) => {
     e.preventDefault();
     alert(`Feature to come later!`)
@@ -34,7 +43,7 @@ function Navigation() {
         type="text"
         placeholder="Search..."
         value={search}
-        onChange={(e) => setSearch(e?.target?.value)}
+        onChange={(e) => handleChange(e?.target?.value)}
       />
       <button
         type="submit"
